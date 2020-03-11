@@ -1,0 +1,70 @@
+# 日志配置
+logging:
+  config: classpath:logback-spring.xml
+  level:
+    web: debug
+#    path: d:/logs
+
+# 配置mybatis
+mybatis:
+  mapperLocations: classpath*:cn/netinnet/fssc/*/dao/mapper/*.xml
+  configLocation: classpath:mybatis-config.xml
+  typeAliasesPackage: cn.netinnet.fssc
+
+server:
+  port: 8080
+  # 用户session过期时间，以秒为单位
+  servlet:
+    session:
+      timeout: 3600
+    # 设置项目名
+    context-path: /
+spring:
+  application:
+    name: spring-activiti
+  # 配置redis
+  session:
+    store-type: redis
+  redis:
+    # 指定库
+    database: 2
+    host: localhost
+    port: 6379
+    timeout: 3600
+  http:
+    encoding:
+      force: true
+      charset: utf-8
+      enabled: true
+  servlet:
+    multipart:
+      enabled: true
+      max-request-size: 10MB
+      max-file-size: 50MB
+  #生产环境prod，测试环境test，开发环境dev，用来区分要不要打印日志
+  #prod：控制台和log都不会打印日志，只有当error日志才会打印到log中
+  #test：控制台和log都会打印日志，这个是最全的
+  #dev： 控制台会打印日志，log不打印日志
+  profiles:
+    active: dev
+  datasource:
+    url: jdbc:mysql://localhost:3306/nin_workflow?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT&nullCatalogMeansCurrent=true&useSSL=false
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+  activiti:
+    #1.flase： 默认值。activiti在启动时，会对比数据库表中保存的版本，如果没有表或者版本不匹配，将抛出异常
+    #2.true： activiti会对数据库中所有表进行更新操作。如果表不存在，则自动创建
+    #3.create_drop： 在activiti启动时创建表，在关闭时删除表（必须手动关闭引擎，才能删除表）
+    #4.drop-create： 在activiti启动时删除原来的旧表，然后在创建新表（不需要手动关闭引擎）
+    database-schema-update: true
+    #检测历史表是否存在
+    db-history-used: true
+    #记录历史等级 可配置的历史级别有none, activity, audit, full
+    history-level: full
+    #校验流程文件，默认校验resources下的processes文件夹里的流程文件
+    check-process-definitions: false
+
+
+swagger:
+  enabled: true

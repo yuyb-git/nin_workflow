@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+<head>
+	<link rel="stylesheet" type="text/css" href="/bpmn/dist/assets/bpmn-font/css/bpmn.css"/>
+	<link rel="stylesheet" type="text/css" href="/bpmn/dist/assets/diagram-js.css"/>
+	<style>
+      html, body, #canvas {
+        height: 100%;
+        padding: 0;
+        margin: 0;
+      }
+
+      .diagram-note {
+        background-color: rgba(66, 180, 21, 0.7);
+        color: White;
+        border-radius: 5px;
+        font-family: Arial;
+        font-size: 12px;
+        padding: 5px;
+        min-height: 16px;
+        width: 50px;
+        text-align: center;
+      }
+
+      .needs-discussion:not(.djs-connection) .djs-visual > :nth-child(1) {
+        stroke: rgba(66, 180, 21, 0.7) !important; /* color elements as red */
+      }
+
+      #save-button {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+      }
+    </style>
+</head>
+<body>
+	<div id="canvas"></div>
+	<!-- <script src="/bpmn/dist/bpmn-modeler.production.min.js"></script> -->
+	<script src="/bpmn/dist/bpmn-modeler.development.js"></script>
+	<script src="/bpmn/bpmn.js"></script>
+	<script src="/libs/jquery-3.2.1.min.js.js"></script>
+	
+</body>
+</html>
