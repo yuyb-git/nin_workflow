@@ -2,6 +2,7 @@ package cn.netinnet.workflow.common.base;
 
 import cn.netinnet.common.util.StringUtil;
 import cn.netinnet.common.util.httpclient.RequestUtil;
+import cn.netinnet.workflow.user.domain.WorkflowUser;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -52,6 +53,10 @@ public abstract class BaseController {
         List list =  supplier.get();
         PageInfo pageInfo = new PageInfo(list);
         return  pageInfo;
+    }
+
+    protected WorkflowUser getWorkflowUser(HttpServletRequest request) {
+        return (WorkflowUser) request.getSession().getAttribute("user");
     }
 
 }

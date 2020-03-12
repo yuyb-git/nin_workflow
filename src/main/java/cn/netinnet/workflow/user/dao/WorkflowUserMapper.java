@@ -15,7 +15,7 @@ import org.apache.ibatis.annotations.Select;
 
 public interface WorkflowUserMapper extends BaseMapper<WorkflowUser, WorkflowUserExample> {
 	
-	@Select("select * from workflow_user where user_name = #{userName}")
+	@Select("select * from workflow_user where username = #{userName}")
 	WorkflowUser getWorkflowUserByName(@Param("userName") String userName);
 	
 }
