@@ -85,7 +85,7 @@ public class CodeGenerator {
 //
 //        }
         // genCode("match_teach_class_group_campaign","match_teach_class_group","match_teach_class_group_campaign_vote","match_sx_group_station","match_sys_option","match_sys_station");
-        genCode("workflow_user");
+        genCode("workflow_bpmn_model");
         //genCodeByCustomModelName("输入表名","输入自定义Model名称");
     }
 

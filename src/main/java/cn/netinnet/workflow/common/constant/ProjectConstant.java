@@ -8,7 +8,7 @@ public final class ProjectConstant {
     //项目基础包名称，根据自己公司的项目修改
     public static final String BASE_PACKAGE = "cn.netinnet.workflow";
     //项目基础包名称，根据自己公司的项目修改
-    public static final String BASE_PACKAGE_MODULE = "cn.netinnet.workflow.user";
+    public static final String BASE_PACKAGE_MODULE = "cn.netinnet.workflow.activiti";
     //Model所在包
     public static final String MODEL_PACKAGE = BASE_PACKAGE_MODULE + ".domain";
     //Mapper所在包
