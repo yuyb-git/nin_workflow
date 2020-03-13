@@ -7,9 +7,9 @@ logging:
 
 # 配置mybatis
 mybatis:
-  mapperLocations: classpath*:cn/netinnet/fssc/*/dao/mapper/*.xml
+  mapperLocations: classpath*:cn/netinnet/workflow/*/dao/mapper/*.xml
   configLocation: classpath:mybatis-config.xml
-  typeAliasesPackage: cn.netinnet.fssc
+  typeAliasesPackage: cn.netinnet.workflow
 
 server:
   port: 8080
@@ -65,6 +65,8 @@ spring:
     #校验流程文件，默认校验resources下的processes文件夹里的流程文件
     check-process-definitions: false
 
+app:
+  bpmn-path: /processes
 
 swagger:
   enabled: true

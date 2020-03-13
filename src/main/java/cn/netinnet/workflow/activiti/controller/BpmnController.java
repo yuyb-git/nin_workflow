@@ -6,14 +6,22 @@ import cn.netinnet.workflow.activiti.service.WorkflowBpmnModelService;
 import cn.netinnet.workflow.common.base.BaseController;
 import cn.netinnet.workflow.common.global.HttpResultEntry;
 import cn.netinnet.workflow.user.domain.WorkflowUser;
+import cn.netinnet.workflow.util.ImageUtil;
+import cn.netinnet.workflow.util.StringUtilForFile;
 import com.github.pagehelper.PageInfo;
 import org.activiti.bpmn.model.BpmnModel;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 
 /**
  * @ClassName BpmnController
@@ -49,7 +57,20 @@ public class BpmnController extends BaseController {
     }
 
     @RequestMapping(value="save")
-    public HttpResultEntry save(String modelName, HttpServletRequest request) {
+    public HttpResultEntry save(String bpmnXml, String modelName, HttpServletRequest request) throws DocumentException {
+
+        String bpmnPath = (String)request.getServletContext().getAttribute("bpmnPath");
+        if(!bpmnPath.endsWith(File.separator)) {
+            bpmnPath += File.separator;
+        }
+        bpmnPath = StringUtilForFile.getAbsolutePath(bpmnPath);
+        String fileName = bpmnPath + modelName + ".bpmn";
+        Document document = DocumentHelper.parseText(bpmnXml);
+        StringUtilForFile.outputXml(document, fileName);
+
+        //上传原图片
+        //ImageUtil.imageUpload(bpmnPath, file, modelName);
+
         WorkflowUser user =  this.getWorkflowUser(request);
         WorkflowBpmnModel bpmn = new WorkflowBpmnModel();
         bpmn.setModelId(DateUtil.getUID());

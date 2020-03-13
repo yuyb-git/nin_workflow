@@ -13,26 +13,27 @@
 	          	  return console.error('could not save BPMN 2.0 diagram', err);
 	          }
 	          var modelName = $.trim($("#modelName").val());
-	          if(modelName==""){
+	          if(modelName === ""){
 	        	  pop.info("请输入流程名称");
 	        	  return;
 	          }
-	          // 如果浏览器支持msSaveOrOpenBlob方法（也就是使用IE浏览器的时候）
+
+	          var blob =null;
+				// 如果浏览器支持msSaveOrOpenBlob方法（也就是使用IE浏览器的时候）
 	          if (window.navigator.msSaveOrOpenBlob) {
-	        	      var blob = new Blob([xml],{type : 'text/plain'});
+	        	      blob = new Blob([xml],{type : 'text/plain'});
 		              window.navigator.msSaveOrOpenBlob(blob, modelName+'.bpmn');
 	          } else {
 	        	    var eleLink = document.createElement('a');
 	        	    eleLink.download = modelName+".bpmn";
 	        	    eleLink.style.display = 'none';
-	        	    var blob = new Blob([xml]);  // 字符内容转变成blob地址
+	        	    blob = new Blob([xml], {type : 'text/plain'});  // 字符内容转变成blob地址
 	        	    eleLink.href = URL.createObjectURL(blob);
 	        	    document.body.appendChild(eleLink);  // 触发点击
-	        	    eleLink.click();
+	        	    //eleLink.click();
 	        	    document.body.removeChild(eleLink);   // 然后移除
 	          } 
-//	          var mySvg = document.querySelector("svg");
-//	     	  var svgXml = $('svg').prop("outerHTML"); IE下有问题
+
 	          var _canvas = document.querySelector('svg');
 	          var w = parseInt(window.getComputedStyle(_canvas).width);
 	          var h = parseInt(window.getComputedStyle(_canvas).height);
@@ -42,9 +43,9 @@
 	          var canvas = document.createElement('canvas');  //准备空画布
 	     	  canvg(canvas, svgXml);
 	     	  bpmnImage = canvas.toDataURL('image/png');
-	          $.SaveForm({
+				$.SaveForm({
 					url :  "/bpmn/save",
-					param : {"bpmnXml":xml,"modelName":modelName,"id":bpmnId,"bpmnImage":bpmnImage},
+					param : {"bpmnXml": xml,"modelName": modelName},
 					json:true,
 					success : function(result) {
 						var id = result.msg;
