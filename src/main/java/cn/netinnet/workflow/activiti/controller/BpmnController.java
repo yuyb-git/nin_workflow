@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.util.Date;
 
 /**
  * @ClassName BpmnController
@@ -76,6 +77,10 @@ public class BpmnController extends BaseController {
         bpmn.setModelId(DateUtil.getUID());
         bpmn.setActivitiModelId("");
         bpmn.setModelName(modelName);
+        bpmn.setBpmnImgae("");
+        bpmn.setBpmnXml("");
+        bpmn.setCreateUserId(1L);
+        bpmn.setCreateTime(new Date());
         workflowBpmnModelService.insertSelective(bpmn, user.getId());
         return HttpResultEntry.ok("保存成功", bpmn.getModelId());
     }
