@@ -1,0 +1,68 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+  <head>
+	  <meta charset="utf-8">
+	  <meta name="viewport" content="width=device-width">
+	  <title>x-spreadsheet</title>
+	  <link th:href="@{/static/js/libs/xspreadsheet/xspreadsheet.css}" rel="stylesheet"/>
+  </head>
+  <body onload="load()">
+  	<div id="x-spreadsheet-demo"></div>
+	<script>
+		function load(){
+			x.spreadsheet.locale('zh-cn');
+			let xs = x.spreadsheet('#x-spreadsheet-demo', {showToolbar: true, showGrid: true})
+					.loadData([{
+						freeze: 'B3',
+						styles: [
+							{
+								bgcolor: '#f4f5f8',
+								textwrap: true,
+								color: '#900b09',
+								border: {
+									top: ['thin', '#0366d6'],
+									bottom: ['thin', '#0366d6'],
+									right: ['thin', '#0366d6'],
+									left: ['thin', '#0366d6'],
+								},
+							},
+						],
+						merges: [
+							'C3:D4',
+						],
+						rows: {
+							1: {
+								cells: {
+									0: { text: 'testingtesttestetst' },
+									2: { text: 'testing' },
+								},
+							},
+							2: {
+								cells: {
+									0: { text: 'render', style: 0 },
+									1: { text: 'Hello' },
+									2: { text: 'haha', merge: [1, 1] },
+								}
+							},
+							8: {
+								cells: {
+									8: { text: 'border test', style: 0 },
+								}
+							}
+						},
+					}]).change((cdata) => {
+						// console.log(cdata);
+						console.log(xs.getData());
+					});
+
+			xs.on('cell-selected', (cell, ri, ci) => {
+				console.log('cell:', cell, ', ri:', ri, ', ci:', ci);
+			}).on('cell-edited', (text, ri, ci) => {
+				console.log('text:', text, ', ri: ', ri, ', ci:', ci);
+			});
+		}
+	</script>
+	<script type="text/javascript" th:src="@{/static/js/libs/xspreadsheet/xspreadsheet.js}"></script>
+	<script type="text/javascript" th:src="@{/static/js/libs/xspreadsheet/locale/zh-cn.js}"></script>
+  </body>
+</html>

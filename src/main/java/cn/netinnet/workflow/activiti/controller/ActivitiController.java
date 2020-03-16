@@ -1,7 +1,7 @@
 package cn.netinnet.workflow.activiti.controller;
 
-import javax.servlet.http.HttpSession;
-
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.ProcessEngine;
@@ -18,11 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import javax.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("model")
+@RequestMapping("/model")
 public class ActivitiController {
 	
 	private static final Logger log = LoggerFactory.getLogger(ActivitiController.class);
@@ -32,10 +31,10 @@ public class ActivitiController {
     @Autowired
     ObjectMapper objectMapper;
     
-    @RequestMapping(value = "index")
+    @RequestMapping(value = "add")
     public ModelAndView index(HttpSession session){
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("index");
+        mv.setViewName("model/add");
         return mv;
     }
 
