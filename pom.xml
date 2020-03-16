@@ -170,6 +170,49 @@
         </dependency>
     </dependencies>
 
+    <!-- 配置架包从中央仓库下载 -->
+    <repositories><!-- 仓库地址 -->
+        <repository>
+            <id>my-nexus-repositories</id>
+            <name>my-nexus-repository</name>
+            <url>http://192.168.10.4:8081/nexus/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <pluginRepositories><!-- 插件地址 -->
+        <pluginRepository>
+            <id>my-nexus-pluginRepositories</id>
+            <name>my-nexus-repository</name>
+            <url>http://192.168.10.4:8081/nexus/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+
+    </pluginRepositories>
+    <!-- 配置发布到中央仓库 -->
+    <distributionManagement>
+        <repository>
+            <id>my-nexus-releases</id>
+            <name>my-nexus-releases</name>
+            <url>http://192.168.10.4:8081/nexus/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>my-nexus-snapshot</id>
+            <name>my-nexus-snapshots</name>
+            <url>http://192.168.10.4:8081/nexus/content/repositories/my-nexus-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <build>
         <finalName>nin_workflow</finalName>
         <resources>
