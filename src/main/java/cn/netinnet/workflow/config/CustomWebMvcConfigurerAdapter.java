@@ -32,7 +32,6 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
  * @Date 2017-11-30
  **/
 @Configuration
-// @EnableWebMvc 谨慎启用，启用后许多spring boot的默认配置会失效
 public class CustomWebMvcConfigurerAdapter extends WebMvcConfigurationSupport {
 
     private static final Logger logger = LoggerFactory.getLogger(CustomWebMvcConfigurerAdapter.class);

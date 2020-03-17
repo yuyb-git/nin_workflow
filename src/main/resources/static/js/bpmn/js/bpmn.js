@@ -60,18 +60,18 @@ $(function() {
 /**
  * Save diagram contents and print them to the console.
  */
-function exportDiagram() {
+window.exportDiagram = function () {
     bpmnModeler.saveXML({format: true}, function (err, xml) {
         if (err) {
             return console.error('could not save BPMN 2.0 diagram', err);
         }
-        var modelName = $.trim($("#modelName").val());
+		let modelName = $.trim($("#modelName").val());
         if (modelName === "") {
             pop.info("请输入流程名称");
             return;
         }
 
-        var blob = null;
+		let blob = null;
         // 如果浏览器支持msSaveOrOpenBlob方法（也就是使用IE浏览器的时候）
         if (window.navigator.msSaveOrOpenBlob) {
             blob = new Blob([xml], {type: 'text/plain'});
@@ -87,15 +87,15 @@ function exportDiagram() {
             document.body.removeChild(eleLink);   // 然后移除
         }
 
-        var _canvas = document.querySelector('svg');
-        var w = parseInt(window.getComputedStyle(_canvas).width);
-        var h = parseInt(window.getComputedStyle(_canvas).height);
-        var svgXml = $('svg').html();
-        var base = '<svg width="' + w + 'px" height="' + h + 'px" style="touch-action: none; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);" data-element-id="Process_1" class="">'
+		let _canvas = document.querySelector('svg');
+		let w = parseInt(window.getComputedStyle(_canvas).width);
+		let h = parseInt(window.getComputedStyle(_canvas).height);
+		let svgXml = $('svg').html();
+		let base = '<svg width="' + w + 'px" height="' + h + 'px" style="touch-action: none; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);" data-element-id="Process_1" class="">';
         svgXml = base + svgXml + "</svg>";
-        var canvas = document.createElement('canvas');  //准备空画布
+		let canvas = document.createElement('canvas');  //准备空画布
         canvg(canvas, svgXml);
-        bpmnImage = canvas.toDataURL('image/png');
+		let bpmnImage = canvas.toDataURL('image/png');
         $.SaveForm({
             url: "/bpmn/save",
             param: {"bpmnXml": xml, "modelName": modelName},
@@ -107,13 +107,13 @@ function exportDiagram() {
             }
         });
     });
-}
+};
 
 /**
  * Open diagram in our modeler instance.
  * @param {String} bpmnXML diagram to display
  */
-function openDiagram(bpmnXML) {
+window.openDiagram = function (bpmnXML) {
     if (bpmnXML === "" || bpmnXML === null) {
         bpmnXML = '<?xml version="1.0" encoding="UTF-8"?>\n' +
             '<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd" id="sample-diagram" targetNamespace="http://bpmn.io/schema/bpmn">\n' +
@@ -135,10 +135,10 @@ function openDiagram(bpmnXML) {
             return console.error('could not import BPMN 2.0 diagram', err);
         }
     });
-}
+};
 openDiagram("");
 $('#fullscreen').click(function() {
-	var screen = isFull();
+	let screen = isFull();
 	if (screen) {
 		exitScreen();
 	} else {
@@ -149,7 +149,7 @@ $('#fullscreen').click(function() {
 function fullScreen() {
 	// ie10以下全屏模式
 	if (window.ActiveXObject) {
-		var wscript = new ActiveXObject("WScript.Shell");
+		let wscript = new ActiveXObject("WScript.Shell");
 		if (wscript) {
 			wscript.SendKeys("{F11}");
 			return;
@@ -170,7 +170,7 @@ function fullScreen() {
 		} else {
 			console.log('该浏览器不支持全屏，请升级最新版本');
 		}
-	};
+	}
 	// 启动全屏
 	fullScreen($('html').get(0)); // 整个网页
 	// fullScreen(document.getElementById("videoElement")); //某个页面元素
@@ -180,12 +180,12 @@ function fullScreen() {
 function exitScreen() {
 	// ie10以下全屏模式
 	if (window.ActiveXObject) {
-		var wscript = new ActiveXObject("WScript.Shell");
+		let wscript = new ActiveXObject("WScript.Shell");
 		if (wscript) {
 			wscript.SendKeys("{F11}");
 			return;
 		}
-	};
+	}
 	// 判断浏览器种类
 	function exit() {
 		if (document.exitFullscreen) {
@@ -197,36 +197,36 @@ function exitScreen() {
 		} else if (document.msExitFullscreen) {
 			document.msExitFullscreen();
 		}
-	};
+	}
 	// 退出全屏模式!
 	exit();
 };
 // 判断是否全屏
 function isFull() {
-	var explorer = window.navigator.userAgent.toLowerCase();
-	var full;
+	let explorer = window.navigator.userAgent.toLowerCase();
+	let full;
 	if (explorer.indexOf('chrome') > 0) {// chrome
-		if (document.body.scrollHeight == window.screen.height
-				&& document.body.scrollWidth == window.screen.width) {
+		if (document.body.scrollHeight === window.screen.height
+				&& document.body.scrollWidth === window.screen.width) {
 			full = true;
 		} else {
 			full = false;
 		}
 	} else {// IE 9+ fireFox
-		if (window.outerHeight == window.screen.height
-				&& window.outerWidth == window.screen.width) {
+		if (window.outerHeight === window.screen.height
+				&& window.outerWidth === window.screen.width) {
 			full = true;
 		} else {
 			full = false;
 		}
 	};
 	return full;
-};
+}
 $('#keybindings').click(function() {
 	$("#help").show();
 });
 //创建一个新的
-function createNew(){
+window.createNew = function (){
 	layer.confirm('确定要重新创建一个BPMN？', {
 		btn : [ '确定', '取消' ]
 	// 按钮
@@ -236,50 +236,51 @@ function createNew(){
 	}, function() {
 		
 	});
-}
+};
 //打开本地BPMN
-function openLocal(){
+window.openLocal = function () {
 	document.getElementById("btn_file").click(); 
-}
+};
+
 //展示BPMN
-function showBPMN(){
-	file = document.getElementById('btn_file').files[0];
-    var URL = window.URL || window.webkitURL;
-    var imgURL = URL.createObjectURL(file);
+window.showBPMN = function (){
+	let file = document.getElementById('btn_file').files[0];
+    let URL = window.URL || window.webkitURL;
+	let imgURL = URL.createObjectURL(file);
     $.get(imgURL,function(xmlDoc,textStatus){
           openDiagram(xmlDoc);
     });
-}
+};
 //下载SVG
-function downloadSVG(){
-	 var modelName = $.trim($("#modelName").val());
-     if(modelName === ""){
-	   	  pop.info("请输入流程名称");
-	   	  return;
-     }
-     var _canvas = document.querySelector('svg');
-     var w = parseInt(window.getComputedStyle(_canvas).width);
-     var h = parseInt(window.getComputedStyle(_canvas).height);
-     var svgXml = $('svg').html();
-     var base = '<svg width="'+w+'px" height="'+h+'px" style="touch-action: none; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);" data-element-id="Process_1" class="">'
-     svgXml = base + svgXml +"</svg>";
-     var canvas = document.createElement('canvas');  //准备空画布
+window.downloadSVG = function (){
+	let modelName = $.trim($("#modelName").val());
+	if(modelName === ""){
+		pop.info("请输入流程名称");
+		return;
+	}
+	let _canvas = document.querySelector('svg');
+	let w = parseInt(window.getComputedStyle(_canvas).width);
+	let h = parseInt(window.getComputedStyle(_canvas).height);
+	let svgXml = $('svg').html();
+	let base = '<svg width="'+w+'px" height="'+h+'px" style="touch-action: none; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);" data-element-id="Process_1" class="">'
+	svgXml = base + svgXml +"</svg>";
+	let canvas = document.createElement('canvas');  //准备空画布
 	 canvg(canvas, svgXml);
-	 imagedata = canvas.toDataURL('image/png');
+	let imagedata = canvas.toDataURL('image/png');
      // 如果浏览器支持msSaveOrOpenBlob方法（也就是使用IE浏览器的时候）
      if (window.navigator.msSaveOrOpenBlob) {
-         var bstr = atob(imagedata.split(',')[1]);
-         var n = bstr.length;
-         var u8arr = new Uint8Array(n);
+		 let bstr = atob(imagedata.split(',')[1]);
+		 let n = bstr.length;
+		 let u8arr = new Uint8Array(n);
          while (n--) {
             u8arr[n] = bstr.charCodeAt(n);
          }
-         var blob = new Blob([u8arr]);
+		 let blob = new Blob([u8arr]);
          window.navigator.msSaveOrOpenBlob(blob, modelName+'.png');
      }else{
-		var a = document.createElement('a');
+		 let a = document.createElement('a');
 		a.href = imagedata;  //将画布内的信息导出为png图片数据
 		a.download = modelName;  //设定下载名称
 		a.click(); //点击触发下载
      }
-}
+};

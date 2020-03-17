@@ -24,6 +24,12 @@ import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @ClassName ActivitiController
+ * @Description
+ * @Author yuyb
+ * @Date 2020/3/12 17:21
+ */
 @Controller
 @RequestMapping("/model")
 public class ActivitiController {

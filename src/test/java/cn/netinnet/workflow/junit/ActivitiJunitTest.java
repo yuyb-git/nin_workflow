@@ -2,10 +2,12 @@ package cn.netinnet.workflow.junit;
 
 import cn.netinnet.workflow.BaseTest;
 import org.activiti.engine.RepositoryService;
+import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.repository.ProcessDefinitionQuery;
+import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -13,7 +15,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.test.annotation.Rollback;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName ActivitiJunitTest
@@ -29,10 +33,12 @@ public class ActivitiJunitTest extends BaseTest {
     RepositoryService repositoryService;
     @Resource
     TaskService taskService;
+    @Resource
+    RuntimeService runtimeService;
 
     @Test
     @Rollback(false)
-    public void prepare() {
+    public void deploy() {
 
         Deployment deployment = repositoryService.createDeployment()//创建一个部署对象
                 .name("请假流程")
@@ -41,6 +47,26 @@ public class ActivitiJunitTest extends BaseTest {
                 .deploy();
         System.out.println("部署ID："+deployment.getId());
         System.out.println("部署名称："+deployment.getName());
+        // 流程部署表 select * from act_re_deployment;
+        // 流程定义表 select * from act_re_procdef;
+        // 资源文件表 select * from act_ge_bytearray;
+    }
+
+    @Test
+    @Rollback(false)
+    public void start() {
+        // 生成运行时流程任务节点表：act_ru_task、
+        //`act_ru_task表的EXECUTION_ID_``PROC_INST_ID_`分别为act_ru_execution的两条记录主键
+        // 生成运行时流程执行实例表：act_ru_execution、
+        // 生成运行时变量表：act_ru_variable
+        String id = "myProcess_1:1:5869e9ee-6767-11ea-acd5-18dbf2291890";
+        Map<String, Object> map = new HashMap<>();
+        map.put("assignee0", "张三");
+        map.put("assignee1", "李四");
+        map.put("assignee2", "王五");
+        ProcessInstance process = runtimeService.startProcessInstanceById(id, map);
+        System.out.println("流程id：" + process.getId());
+        System.out.println("流程定义id：" + process.getProcessDefinitionId());
     }
 
     @Test
