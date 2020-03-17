@@ -8,8 +8,12 @@ import cn.netinnet.workflow.common.global.HttpResultEntry;
 import cn.netinnet.workflow.user.domain.WorkflowUser;
 import cn.netinnet.workflow.util.ImageUtil;
 import cn.netinnet.workflow.util.StringUtilForFile;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.pagehelper.PageInfo;
 import org.activiti.bpmn.model.BpmnModel;
+import org.activiti.engine.RepositoryService;
+import org.activiti.engine.repository.Model;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -23,6 +27,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * @ClassName BpmnController
@@ -35,7 +40,11 @@ import java.util.Date;
 public class BpmnController extends BaseController {
 
     @Resource
+    RepositoryService repositoryService;
+    @Resource
     WorkflowBpmnModelService workflowBpmnModelService;
+    @Resource
+    ObjectMapper objectMapper;
 
     @RequestMapping("/add")
     public ModelAndView add() {
@@ -71,11 +80,19 @@ public class BpmnController extends BaseController {
 
         //上传原图片
         //ImageUtil.imageUpload(bpmnPath, file, modelName);
+        ObjectNode modelObjectNode = objectMapper.createObjectNode();
+        //保存act_re_model
+        Model newModel = repositoryService.newModel();
+        newModel.setName(modelName);
+        newModel.setCategory("请假单");
+        newModel.setKey(UUID.randomUUID().toString());
+        newModel.setMetaInfo("请假单-v1-");
+        repositoryService.saveModel(newModel);
 
         WorkflowUser user =  this.getWorkflowUser(request);
         WorkflowBpmnModel bpmn = new WorkflowBpmnModel();
         bpmn.setModelId(DateUtil.getUID());
-        bpmn.setActivitiModelId("");
+        bpmn.setActivitiModelId(newModel.getId());
         bpmn.setModelName(modelName);
         bpmn.setBpmnImgae("");
         bpmn.setBpmnXml("");
@@ -85,13 +102,12 @@ public class BpmnController extends BaseController {
         return HttpResultEntry.ok("保存成功", bpmn.getModelId());
     }
 
-    /*@RequestMapping("/list")
+    @RequestMapping("/list")
     public HttpResultEntry list() {
         PageInfo pageInfo = getPage(() -> {
-            return workflowUserMapper.selectAllUser();
+            return workflowBpmnModelService.getList(new WorkflowBpmnModel());
         });
-        HttpResultEntry httpResultEntry = workflowUserService.returnPage2EJS("",pageInfo);
-        return httpResultEntry;
-    }*/
+        return workflowBpmnModelService.returnPage2EJS("",pageInfo);
+    }
 
 }
