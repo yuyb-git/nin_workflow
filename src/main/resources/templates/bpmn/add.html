@@ -134,7 +134,11 @@
     <script th:src="@{/static/js/common.js}"></script>
     <script th:src="@{/static/js/libs/layer/layer.js}" type="text/javascript"></script>
     <script th:src="@{/static/js/bpmn/js/bpmn-modeler.development.js}"></script>
-    <script th:src="@{/static/js/bpmn/js/bpmn.js}"></script>
+    <!--<script th:src="@{/static/js/require.js}"></script>-->
+    <script type="module">
+        import '/static/js/bpmn/js/bpmn.js';
+    </script>
+    <!--<script type="module" th:src="@{/static/js/bpmn/js/bpmn.js}"></script>-->
     <script th:src="@{/static/js/localstorage/jquery.utils.js}"></script>
     <script th:src="@{/static/js/localstorage/localstorage.js}"></script>
     <!-- Required to convert named colors to RGB -->
@@ -145,49 +149,7 @@
 	<script th:src="@{/static/js/libs/canvg/canvg.min.js}"></script>
 	<!-- endbuild -->
     <script type="text/javascript">
-     	var bpmnId = ""; 
-	    $(function() {
-	    	bpmnId =  bpmn.LocalStorage.get({
-		 		key : "bpmnId"
-			});
-	    	bpmnName =  bpmn.LocalStorage.get({
-		 		key : "bpmnName"
-			});
-	    	$("#modelName").val(bpmnName);
-	    	var bpmnXml = bpmn.LocalStorage.get({
-   			 	key : "bpmn"+bpmnId
-   		    });
-	    	if(bpmnXml==""){//优先走本地缓存，保存以后记得清除
-			    	if(bpmnId!=""){
-				    	   $.SetForm({
-								url :  "/bpmn/get",
-								param : {"id":bpmnId},
-								json:true,
-								async :false,
-								success : function(result) {
-									bpmnXml = result.bpmnXml;
-									$("#modelName").val(result.modelName)
-								}
-							});
-			    	}
-	    	}
-	    	openDiagram(bpmnXml);
-	    	timer = window.setInterval(function(){
-	        	  bpmnModeler.saveXML({ format: true }, function(err, xml) {
-	    	          if (err) {
-	    	          	  return console.error('could not save BPMN 2.0 diagram', err);
-	    	          }
-	    	          //保存单个对象
-	   	    		 bpmn.LocalStorage.set({
-	   	    		 		key : "bpmn"+bpmnId,
-	   	    		  		value : xml,
-	   	    		});
-	   	    		var bpmnXml = bpmn.LocalStorage.get({
-	   	    			 	key : "bpmn"+bpmnId
-	   	    		});
-	    	     });
-	         }, 1000);
-	    }); 
+
     </script>
   </body>
 </html>

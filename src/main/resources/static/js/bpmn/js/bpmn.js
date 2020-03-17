@@ -1,86 +1,140 @@
- var bpmnModeler = new BpmnJS({
-        container: '#canvas',
-        keyboard: {
-          bindTo: window
+import customTranslate from '/static/js/bpmn/js/customTranslate.js';
+let customTranslateModule = {
+    translate: [ 'value', customTranslate ]
+};
+let bpmnModeler = new BpmnJS({
+    container: '#canvas',
+    keyboard: {
+        bindTo: window
+    },
+    additionalModules: [
+        customTranslateModule
+    ]
+});
+
+let bpmnId = "";
+let bpmnName = "";
+$(function() {
+	bpmnId =  bpmn.LocalStorage.get({
+		key : "bpmnId"
+	});
+	bpmnName =  bpmn.LocalStorage.get({
+		key : "bpmnName"
+	});
+	$("#modelName").val(bpmnName);
+	let bpmnXml = bpmn.LocalStorage.get({
+		key : "bpmn"+bpmnId
+	});
+	if(bpmnXml === ""){//优先走本地缓存，保存以后记得清除
+		if(bpmnId !== ""){
+			$.SetForm({
+				url :  "/bpmn/get",
+				param : {"id":bpmnId},
+				json:true,
+				async :false,
+				success : function(result) {
+					bpmnXml = result.bpmnXml;
+					$("#modelName").val(result.modelName)
+				}
+			});
+		}
+	}
+	//openDiagram(bpmnXml);
+	let timer = window.setInterval(function(){
+		bpmnModeler.saveXML({ format: true }, function(err, xml) {
+			if (err) {
+				return console.error('could not save BPMN 2.0 diagram', err);
+			}
+			//保存单个对象
+			bpmn.LocalStorage.set({
+				key : "bpmn"+bpmnId,
+				value : xml,
+			});
+			bpmnXml = bpmn.LocalStorage.get({
+				key : "bpmn"+bpmnId
+			});
+		});
+	}, 1000);
+});
+
+/**
+ * Save diagram contents and print them to the console.
+ */
+function exportDiagram() {
+    bpmnModeler.saveXML({format: true}, function (err, xml) {
+        if (err) {
+            return console.error('could not save BPMN 2.0 diagram', err);
         }
-      });
-      /**
-       * Save diagram contents and print them to the console.
-       */
-      function exportDiagram() {
-	        bpmnModeler.saveXML({ format: true }, function(err, xml) {
-	          if (err) {
-	          	  return console.error('could not save BPMN 2.0 diagram', err);
-	          }
-	          var modelName = $.trim($("#modelName").val());
-	          if(modelName === ""){
-	        	  pop.info("请输入流程名称");
-	        	  return;
-	          }
+        var modelName = $.trim($("#modelName").val());
+        if (modelName === "") {
+            pop.info("请输入流程名称");
+            return;
+        }
 
-	          var blob =null;
-				// 如果浏览器支持msSaveOrOpenBlob方法（也就是使用IE浏览器的时候）
-	          if (window.navigator.msSaveOrOpenBlob) {
-	        	      blob = new Blob([xml],{type : 'text/plain'});
-		              window.navigator.msSaveOrOpenBlob(blob, modelName+'.bpmn');
-	          } else {
-	        	    var eleLink = document.createElement('a');
-	        	    eleLink.download = modelName+".bpmn";
-	        	    eleLink.style.display = 'none';
-	        	    blob = new Blob([xml], {type : 'text/plain'});  // 字符内容转变成blob地址
-	        	    eleLink.href = URL.createObjectURL(blob);
-	        	    document.body.appendChild(eleLink);  // 触发点击
-	        	    //eleLink.click();
-	        	    document.body.removeChild(eleLink);   // 然后移除
-	          } 
+        var blob = null;
+        // 如果浏览器支持msSaveOrOpenBlob方法（也就是使用IE浏览器的时候）
+        if (window.navigator.msSaveOrOpenBlob) {
+            blob = new Blob([xml], {type: 'text/plain'});
+            window.navigator.msSaveOrOpenBlob(blob, modelName + '.bpmn');
+        } else {
+            var eleLink = document.createElement('a');
+            eleLink.download = modelName + ".bpmn";
+            eleLink.style.display = 'none';
+            blob = new Blob([xml], {type: 'text/plain'});  // 字符内容转变成blob地址
+            eleLink.href = URL.createObjectURL(blob);
+            document.body.appendChild(eleLink);  // 触发点击
+            //eleLink.click();
+            document.body.removeChild(eleLink);   // 然后移除
+        }
 
-	          var _canvas = document.querySelector('svg');
-	          var w = parseInt(window.getComputedStyle(_canvas).width);
-	          var h = parseInt(window.getComputedStyle(_canvas).height);
-	          var svgXml = $('svg').html();
-	          var base = '<svg width="'+w+'px" height="'+h+'px" style="touch-action: none; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);" data-element-id="Process_1" class="">'
-	          svgXml = base + svgXml +"</svg>";
-	          var canvas = document.createElement('canvas');  //准备空画布
-	     	  canvg(canvas, svgXml);
-	     	  bpmnImage = canvas.toDataURL('image/png');
-				$.SaveForm({
-					url :  "/bpmn/save",
-					param : {"bpmnXml": xml,"modelName": modelName},
-					json:true,
-					success : function(result) {
-						var id = result.msg;
-						pop.success("保存成功");
-						$('.sidebar-menu', parent.document).find("li[data-src='bpmn/index.shtml']").trigger("click");
-					}
-				});
-	        });
-      }
-      /**
-       * Open diagram in our modeler instance.
-       * @param {String} bpmnXML diagram to display
-       */
-      function openDiagram(bpmnXML) {
-    	   if(bpmnXML===""||bpmnXML===null){
-				  bpmnXML='<?xml version="1.0" encoding="UTF-8"?>\n' +
-				'<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd" id="sample-diagram" targetNamespace="http://bpmn.io/schema/bpmn">\n' +
-				'  <bpmn2:process id="Process_1">\n' +
-				'    <bpmn2:startEvent id="StartEvent_1"/>\n' +
-				'  </bpmn2:process>\n' +
-				'  <bpmndi:BPMNDiagram id="BPMNDiagram_1">\n' +
-				'    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1">\n' +
-				'      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">\n' +
-				'        <dc:Bounds height="36.0" width="36.0" x="412.0" y="240.0"/>\n' +
-				'      </bpmndi:BPMNShape>\n' +
-				'    </bpmndi:BPMNPlane>\n' +
-				'  </bpmndi:BPMNDiagram>\n' +
-				'</bpmn2:definitions>'; //BPMN 2.0 xml
-    	   }
-	        // import diagram
-	        bpmnModeler.importXML(bpmnXML, function(err) {
-		          if (err) {
-		            return console.error('could not import BPMN 2.0 diagram', err);
-		          }
-	        });
+        var _canvas = document.querySelector('svg');
+        var w = parseInt(window.getComputedStyle(_canvas).width);
+        var h = parseInt(window.getComputedStyle(_canvas).height);
+        var svgXml = $('svg').html();
+        var base = '<svg width="' + w + 'px" height="' + h + 'px" style="touch-action: none; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);" data-element-id="Process_1" class="">'
+        svgXml = base + svgXml + "</svg>";
+        var canvas = document.createElement('canvas');  //准备空画布
+        canvg(canvas, svgXml);
+        bpmnImage = canvas.toDataURL('image/png');
+        $.SaveForm({
+            url: "/bpmn/save",
+            param: {"bpmnXml": xml, "modelName": modelName},
+            json: true,
+            success: function (result) {
+                var id = result.msg;
+                pop.success("保存成功");
+                $('.sidebar-menu', parent.document).find("li[data-src='bpmn/index.shtml']").trigger("click");
+            }
+        });
+    });
+}
+
+/**
+ * Open diagram in our modeler instance.
+ * @param {String} bpmnXML diagram to display
+ */
+function openDiagram(bpmnXML) {
+    if (bpmnXML === "" || bpmnXML === null) {
+        bpmnXML = '<?xml version="1.0" encoding="UTF-8"?>\n' +
+            '<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd" id="sample-diagram" targetNamespace="http://bpmn.io/schema/bpmn">\n' +
+            '  <bpmn2:process id="Process_1">\n' +
+            '    <bpmn2:startEvent id="StartEvent_1"/>\n' +
+            '  </bpmn2:process>\n' +
+            '  <bpmndi:BPMNDiagram id="BPMNDiagram_1">\n' +
+            '    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1">\n' +
+            '      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">\n' +
+            '        <dc:Bounds height="36.0" width="36.0" x="412.0" y="240.0"/>\n' +
+            '      </bpmndi:BPMNShape>\n' +
+            '    </bpmndi:BPMNPlane>\n' +
+            '  </bpmndi:BPMNDiagram>\n' +
+            '</bpmn2:definitions>'; //BPMN 2.0 xml
+    }
+    // import diagram
+    bpmnModeler.importXML(bpmnXML, function (err) {
+        if (err) {
+            return console.error('could not import BPMN 2.0 diagram', err);
+        }
+    });
 }
 openDiagram("");
 $('#fullscreen').click(function() {
@@ -177,7 +231,7 @@ function createNew(){
 		btn : [ '确定', '取消' ]
 	// 按钮
 	}, function() {
-		layer.closeAll()
+		layer.closeAll();
 		openDiagram("")
 	}, function() {
 		
@@ -199,7 +253,7 @@ function showBPMN(){
 //下载SVG
 function downloadSVG(){
 	 var modelName = $.trim($("#modelName").val());
-     if(modelName==""){
+     if(modelName === ""){
 	   	  pop.info("请输入流程名称");
 	   	  return;
      }

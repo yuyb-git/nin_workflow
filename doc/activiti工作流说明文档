@@ -18,3 +18,9 @@ Activiti流程：
     3、部署一个流程.bomn和.png，生成部署信息act_re_deployment
     4、部署成功，生成流程定义信息表数据act_re_procdef，这是流程的实体
     5、启动流程->根据act_re_procdef的key，生成act_ru_运行时表数据
+
+5.gateways 网关
+Exclusive gateways: 排它网关 - 相当于一个 if - else 表达式
+Inclusive gateways: 包含网关 - 相当于多个 if 条件表达式
+Parallel gateways: 并行网关 - 不需要条件判断直接执行其他路径
+Event-based gateways: the paths will be executed based on the events that satisfy the conditions
