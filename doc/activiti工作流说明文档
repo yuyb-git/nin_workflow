@@ -1,0 +1,20 @@
+1.什么是流程变量
+流程变量就是activiti在管理工作流时根据管理需要而设置的变量。
+比如在请假流程流转时如果请假天数大于3天则由总经理审核，否则由人事直接审核，请假天数就可以设置为流程变量，在流程流转时使用。
+
+2.流程变量作用域
+流程变量的作用域默认是一个流程实例(processInstance)，也可以是一个任务(task)或一个执行实例(execution)，这三个作用域流程实例的范围最大，可以称为global变量，任务和执行实例仅仅是针对一个任务和一个执行实例范围，范围没有流程实例大，称为local变量。
+
+3.流程变量的使用方法
+1）设置流程变量
+2）通过UEL表达式使用流程变量
+
+4.
+act_re_deployment是部署的信息
+ct_re_procdef是流程的实体
+Activiti流程：
+    1、由界面如bpmn-js新建编辑流程图，
+    2、保存为act_re_model和自定义模板workflow_bpmn_model（关联act_re_model）
+    3、部署一个流程.bomn和.png，生成部署信息act_re_deployment
+    4、部署成功，生成流程定义信息表数据act_re_procdef，这是流程的实体
+    5、启动流程->根据act_re_procdef的key，生成act_ru_运行时表数据
