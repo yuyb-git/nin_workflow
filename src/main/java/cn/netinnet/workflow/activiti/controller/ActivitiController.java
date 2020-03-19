@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
-import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
@@ -37,20 +36,23 @@ public class ActivitiController {
 	private static final Logger log = LoggerFactory.getLogger(ActivitiController.class);
 	 
     @Resource
-    ProcessEngine processEngine;
-    @Resource
     RepositoryService repositoryService;
     @Resource
     RuntimeService runtimeService;
     @Resource
     TaskService taskService;
-    @Resource
-    ObjectMapper objectMapper;
 
     @RequestMapping(value = "add")
     public ModelAndView index(HttpSession session){
         ModelAndView mv = new ModelAndView();
         mv.setViewName("model/add");
+        return mv;
+    }
+
+    @RequestMapping(value = "spread")
+    public ModelAndView spreadSheet(HttpSession session){
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("model/spread");
         return mv;
     }
 
@@ -102,7 +104,7 @@ public class ActivitiController {
     @ResponseBody
     public Object startProcess(String keyName) {
         //设置assignee的取值，用户可以在界面上设置流程的执行人
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>(5);
         map.put("assignee0", "张三");
         map.put("assignee1", "李四");
         map.put("assignee2", "王五");

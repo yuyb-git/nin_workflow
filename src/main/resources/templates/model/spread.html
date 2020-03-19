@@ -1,0 +1,27 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>x-spreadsheet</title>
+    <link th:href="@{/static/js/libs/spreadJs/gc.spread.sheets.13.0.0.css}" rel="stylesheet"/>
+</head>
+<body>
+    <div id="ss" style="width:100%; height:750px;border: 1px solid gray;"></div>
+<script type="text/javascript" th:src="@{/static/js/libs/spreadJs/spread.sheets.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/libs/spreadJs/gc.spread.sheets.resources.zh.13.0.0.min.js}"></script>
+<script>
+    window.onload = function () {
+        let spread = new GC.Spread.Sheets.Workbook(document.getElementById('ss'), { sheetCount: 1 });
+        let sheet = spread.getSheet(0);
+        let person = { name: 'Wang feng', age: 25, gender: 'Male', address: { postcode: '710075' } };
+        let source = new GC.Spread.Sheets.Bindings.CellBindingSource(person);
+        sheet.setBindingPath(2, 2, 'name');
+        sheet.setBindingPath(3, 2, 'age');
+        sheet.setBindingPath(4, 2, 'gender');
+        sheet.setBindingPath(5, 2, 'address.postcode');
+        sheet.setDataSource(source);
+    };
+</script>
+</body>
+</html>
