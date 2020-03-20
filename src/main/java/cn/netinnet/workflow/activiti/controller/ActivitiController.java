@@ -49,10 +49,10 @@ public class ActivitiController {
         return mv;
     }
 
-    @RequestMapping(value = "spread")
+    @RequestMapping(value = "excel")
     public ModelAndView spreadSheet(HttpSession session){
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("model/spread");
+        mv.setViewName("model/excel");
         return mv;
     }
 

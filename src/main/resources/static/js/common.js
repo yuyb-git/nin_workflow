@@ -102,7 +102,7 @@ $.SaveForm = function(options) {
 			dataType : options.dataType,
 			contentType : options.json?options.jsonType:options.contentType,
 			success : function(data) {
-				if (data.code == '500') {
+				if (data.code === '500') {
 					pop.error(data.msg);
 				} else {
 					options.success(data);
@@ -138,10 +138,10 @@ $.SetForm = function(options) {
 		dataType : options.dataType,
 		contentType : options.json?options.jsonType:options.contentType,
 		success : function(data) {
-			if (data.code == '500') {
+			if (data.code === '500') {
 				pop.error(data.msg);
 			} else {
-				options.success(data.rows);
+				options.success(data);
 			}
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {

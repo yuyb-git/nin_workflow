@@ -104,8 +104,9 @@ public class BpmnController extends BaseController {
 
     @RequestMapping("/list")
     public HttpResultEntry list() {
+
         PageInfo pageInfo = getPage(() -> {
-            return workflowBpmnModelService.getList(new WorkflowBpmnModel());
+            return repositoryService.createModelQuery().list();
         });
         return workflowBpmnModelService.returnPage2EJS("",pageInfo);
     }
