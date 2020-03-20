@@ -1,5 +1,5 @@
 dialogOpen = function(opt){
-	var defaults = {
+	let defaults = {
 		id : 'layerForm',
 		type:2,
 		title : '',
@@ -12,8 +12,8 @@ dialogOpen = function(opt){
 		btn: ['确定', '取消'],
 		success: function(){},
 		yes: function(){}
-	}
-	var option = $.extend({}, defaults, opt);
+	};
+	let option = $.extend({}, defaults, opt);
 	if(option.content===""){
 		if(option.scroll){
 			option.content = [option.url]
@@ -42,7 +42,8 @@ dialogOpen = function(opt){
 			option.yes(option.id);
 		}
     });
-}
+};
+
 //角色判断
 function hasRole(role) {
 	if (isNullOrEmpty(window.parent.role)) {
@@ -60,26 +61,26 @@ isNullOrEmpty = function(obj) {
 	} else {
 		return false;
 	}
-}
+};
 
 tabiframeId = function() {
-	var iframeId = top.$(".DP_iframe:visible").attr("id");
+	let iframeId = top.$(".DP_iframe:visible").attr("id");
 	return iframeId;
-}
+};
 
 $.currentIframe = function() {
-	var tabId = tabiframeId();
+	let tabId = tabiframeId();
 	if (isNullOrEmpty(tabId)) {// 单页iframe嵌套
 		return $(window.parent.document).contents().find('#main')[0].contentWindow;
 	}
 	return $(window.parent.document).contents().find('#' + tabiframeId())[0].contentWindow;// 多层tab页嵌套
-}
+};
 /**
  * 场景一 如果后台以一个Map参数 @RequestBody Map<String, Object> params 传输  JSON.stringify(options.param) 
  * 场景二 如果后台以多个参数 String username, String password 直接调用即可 手动设置 json : true
  */
 $.SaveForm = function(options) {
-	var defaults = {
+	let defaults = {
 		url : "",
 		param : {},
 		type : "post",
@@ -148,11 +149,13 @@ $.SetForm = function(options) {
 			pop.error(errorThrown);
 		}
 	});
-}
+};
+
 dialogClose = function() {
 	var index = top.layer.getFrameIndex(window.name); // 先得到当前iframe层的索引
 	top.layer.close(index); // 再执行关闭
-}
+};
+
 /**
  * 显示加载框
  * @param message
@@ -162,28 +165,28 @@ function loading(){
 		  shade: [0.1,'#fff'] 
 		});
 }
-var pop={};
+let pop={};
 
 /**
  * 消息提示
  */
-pop.info=function(message){
+pop.info = function(message){
 	showMsg(message,"info");
-}
+};
 
 /**
  * 成功提示
  */
-pop.success=function(message){
+pop.success = function(message){
 	showMsg(message,"success");
-}
+};
 
 /**
  * 错误提示
  */
-pop.error=function(message){
+pop.error = function(message){
 	showMsg(message,"error");
-}
+};
 /**
  * 显示提示框
  */
@@ -193,32 +196,32 @@ function showMsg(message,type,closed,timeout){
 	//如果type为函数，则后面的参数往前移
 	if (typeof type == 'function') {
 		closed=type;
-	}else if(type=="info"){
+	}else if(type==="info"){
 		iconType=0;
-	}else if(type=="success"){
+	}else if(type==="success"){
 		iconType=1;
-	}else if(type=="error"){
+	}else if(type==="error"){
 		iconType=2;
-	}else if(type=="question"){
+	}else if(type==="question"){
 		iconType=3;
-	}else if(type=="lock"){
+	}else if(type==="lock"){
 		iconType=4;
-	}else if(type=="cry"){
+	}else if(type==="cry"){
 		iconType=5;
-	}else if(type=="smile"){
+	}else if(type==="smile"){
 		iconType=6;
 	}
 	//如果closed不是函数，则后面的参数往前移
 	if (typeof closed != 'function') {
 		timeout=closed;
 	}
-	if(iconType!=""&&timeout!=""){
+	if(iconType !== "" && timeout !== ""){
 		$layer.msg(message, {icon: iconType,time: timeout}, function(){
 			if (typeof closed == 'function') {
 				closed();
 			}
 		});   
-	}else if(iconType!=""){
+	}else if(iconType !== ""){
 		$layer.msg(message, {icon: iconType}, function(){
 			if (typeof closed == 'function') {
 				closed();
@@ -232,7 +235,7 @@ function showMsg(message,type,closed,timeout){
  * 获得layer对话框对象
  */
 function getLayer(){
-	var $layer = undefined;
+	let $layer = undefined;
 	if (top.layer){
 		$layer = top.layer;
 	}else if (parent.layer){
@@ -244,14 +247,14 @@ function getLayer(){
 }
 //时间格式化
 function formatDate (date, fmt) {
-	  var  o = {
+	  let  o = {
 		    'M+': date.getMonth() + 1, // 月份
 		    'd+': date.getDate(), // 日
 		    'h+': date.getHours(), // 小时
 		    'm+': date.getMinutes(), // 分
 		    's+': date.getSeconds(), // 秒
 		    'S': date.getMilliseconds() // 毫秒
-	  }
+	  };
 	  if (/(y+)/.test(fmt)) {
 	      fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length))
 	  }

@@ -1,14 +1,22 @@
 import customTranslate from '/static/js/bpmn/js/customTranslate.js';
+import propertiesPanelModule from '../../bpmn-js-properties-panel';
+import propertiesProviderModule from '../../bpmn-js-properties-panel/lib/provider/camunda';
+//import camundaModdleDescriptor from 'camunda-bpmn-moddle/resources/camunda.json';
 let customTranslateModule = {
     translate: [ 'value', customTranslate ]
 };
 let bpmnModeler = new BpmnJS({
-    container: '#canvas',
+	container: '#canvas',
+	propertiesPanel: {
+		parent: '#js-properties-panel'
+	},
     keyboard: {
         bindTo: window
     },
     additionalModules: [
-        customTranslateModule
+        customTranslateModule,
+		propertiesPanelModule,
+		propertiesProviderModule
     ]
 });
 
