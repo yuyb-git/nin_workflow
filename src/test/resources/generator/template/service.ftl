@@ -1,8 +1,8 @@
-package ${BASE_PACKAGE_MODULE}.service;
+package ${basePackage}.activiti.service;
 
 import ${basePackage}.common.base.Service;
-import ${BASE_PACKAGE_MODULE}.domain.${modelNameUpperCamel};
-import ${BASE_PACKAGE_MODULE}.domain.${modelNameUpperCamel}Example;
+import ${basePackage}.activiti.domain.${modelNameUpperCamel};
+import ${basePackage}.activiti.domain.${modelNameUpperCamel}Example;
 
 
 /**

@@ -1,10 +1,10 @@
-package ${BASE_PACKAGE_MODULE}.service.impl;
+package ${basePackage}.activiti.service.impl;
 
 import ${basePackage}.common.base.BaseService;
-import ${BASE_PACKAGE_MODULE}.dao.${modelNameUpperCamel}Mapper;
-import ${BASE_PACKAGE_MODULE}.domain.${modelNameUpperCamel};
-import ${BASE_PACKAGE_MODULE}.domain.${modelNameUpperCamel}Example;
-import ${BASE_PACKAGE_MODULE}.service.${modelNameUpperCamel}Service;
+import ${basePackage}.activiti.dao.${modelNameUpperCamel}Mapper;
+import ${basePackage}.activiti.domain.${modelNameUpperCamel};
+import ${basePackage}.activiti.domain.${modelNameUpperCamel}Example;
+import ${basePackage}.activiti.service.${modelNameUpperCamel}Service;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

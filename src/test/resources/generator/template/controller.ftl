@@ -1,10 +1,10 @@
-package ${BASE_PACKAGE_MODULE}.controller;
+package ${basePackage}.controller;
 
 import ${basePackage}.common.base.BaseController;
-import ${BASE_PACKAGE_MODULE}.domain.${modelNameUpperCamel};
+import ${basePackage}.domain.${modelNameUpperCamel};
 import ${basePackage}.common.constant.GlobalConstant;
 import ${basePackage}.common.global.HttpResultEntry;
-import ${BASE_PACKAGE_MODULE}.service.${modelNameUpperCamel}Service;
+import ${basePackage}.service.${modelNameUpperCamel}Service;
 
 import com.github.pagehelper.PageInfo;
 
