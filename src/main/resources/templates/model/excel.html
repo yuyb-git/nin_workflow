@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="/static/js/libs/spreadJs/css/gc.spread.sheets.excel2013white.11.0.0.css" title="spread-theme"/>
     <link rel="stylesheet" href="/static/js/libs/spreadJs/css/inspector.css"/>
     <link rel="stylesheet" href="/static/js/libs/spreadJs/css/insp-table-format.css"/>
-     <link rel="stylesheet" href="/static/js/libs/spreadJs/css/insp-slicer-format.css"/>
+    <link rel="stylesheet" href="/static/js/libs/spreadJs/css/insp-slicer-format.css"/>
     <link rel="stylesheet" href="/static/js/libs/spreadJs/css/insp-conditional-formatting.css"/>
     <link rel="stylesheet" href="/static/js/libs/spreadJs/css/colorpicker.css"/>
     <link rel="stylesheet" href="/static/js/libs/spreadJs/css/borderpicker.css"/>
@@ -54,7 +54,8 @@
             <div>
                 <div class="insp-row">
                     <div>
-
+                        <input type="hidden" id="modelName" th:value="${modelName}"/>
+                        <input type="hidden" id="excelData" th:value="${excelData}"/>
                         <button type="button" class="btn btn-default btn-toolbar localize-tooltip" id="doImport"
                                 title="@toolBar.importFile@">
                             <span class="fa fa-folder-open fa-2x"></span>

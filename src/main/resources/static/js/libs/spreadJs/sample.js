@@ -6390,6 +6390,7 @@ function getResourceMap(src) {
     addResourceMap(resourceMap, src, []);
 }
 
+let modelName = null;
 $(document).ready(function () {
     function localizeUI() {
         function getLocalizeString(text) {
@@ -6427,11 +6428,18 @@ $(document).ready(function () {
     getResourceMap(uiResource);
 
     localizeUI();
-
+    let excelData = $('#excelData').val();
     spread = new spreadNS.Workbook($("#ss")[0], {tabStripRatio: 0.88});
     excelIO = new GC.Spread.Excel.IO();
+    modelName = $('#modelName').val();
+    if(modelName){
+        spread.fromJSON(JSON.parse(pako.inflate(atob(excelData),{to: 'string'})));
+        //importJson(excelData);
+    }else{
+        initSpread();
+    }
+
     getThemeColor();
-    initSpread();
 
     //Change default allowCellOverflow the same with Excel.
     spread.sheets.forEach(function (sheet) {
@@ -6900,7 +6908,7 @@ function jsonList(){
 function exportToJSON() {
     var temp = new Object();
     temp = GetRequest();
-    var excelId = temp.excelId;
+    var excelId = 2;
     var answerJson = '';
     if(excelId){
         answerJson = jsonList();
@@ -6914,19 +6922,19 @@ function exportToJSON() {
     var _url = '';
     var _data = '';
     if(excelId){
-        _url = '../../lsptJcExcel/setExcel';
-        _data = {"init":_text,"excelId":excelId,"answerContent":answerJson};
+        _url = '/model/setExcelJson';
+        _data = {"excelJson":_text,"excelId":excelId,"fileName":modelName};
     }else {
-        _url = '../../updateExcelText';
+        _url = '/updateExcelText';
         _data = {"text":_text,"bgBillId":bgBillId};
     }
     $.ajax({url:_url,type:"POST",async:false,data:_data,dateType:"JSON",success:function(data){
-        if(data.code == "200"){
+        if(data.code === "200"){
             alert("保存成功！");
-            window.location.reload(true)
+            //window.location.reload(true)
         }else{
             alert("保存失败！");
-            window.location.reload(true)
+            //window.location.reload(true)
         }
     },error:function(){
         alert("system error!");
