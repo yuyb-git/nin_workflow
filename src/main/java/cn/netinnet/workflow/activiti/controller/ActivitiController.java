@@ -62,6 +62,13 @@ public class ActivitiController {
         return mv;
     }
 
+    @RequestMapping(value = "purchase")
+    public ModelAndView purchase(HttpSession session){
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("model/cgd");
+        return mv;
+    }
+
     @RequestMapping(value = "excel")
     public ModelAndView spreadSheet(HttpSession session){
         ModelAndView mv = new ModelAndView();
