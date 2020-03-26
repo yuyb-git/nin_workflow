@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="icon" href="/static/js/bpmn/dist/favicon.ico">
+    <title>bpmn-test</title>
+    <link href="/static/js/bpmn/css/bpmn_font.css"  rel="stylesheet">
+    <link href="/static/js/bpmn/css/bpmn.css"  rel="stylesheet">
+    <link href="/static/js/bpmn/css/diagram-js.css"  rel="stylesheet">
+    <link href="/static/js/bpmn/dist/static/css/app.fd6e99f1.css" rel="preload" as="style">
+    <link href="/static/js/bpmn/dist/static/css/chunk-vendors.493088c9.css" rel="preload" as="style">
+    <link href="/static/js/bpmn/dist/static/js/app.66fde437.js" rel="preload" as="script">
+    <link href="/static/js/bpmn/dist/static/js/chunk-vendors.eaa5559f.js" rel="preload" as="script">
+    <link href="/static/js/bpmn/dist/static/css/chunk-vendors.493088c9.css" rel="stylesheet">
+    <link href="/static/js/bpmn/dist/static/css/app.fd6e99f1.css" rel="stylesheet">
+</head>
+<body>
+    <noscript><strong>We're sorry but bpmn-test doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript>
+    <div id=app></div>
+    <!-- 左下角面板 -->
+    <div class="io-import-export" style="position: fixed;left: 255px;">
+        <!-- 导入和新增 -->
+        <ul class="io-import io-control io-control-list io-horizontal">
+            <li>
+                <input type="file"  onchange="showBPMN()"  id="btn_file" style="display:none">
+                <button title="导入本地BPMN"  onclick="openLocal()">
+                    <span class="icon-open"></span>
+                </button>
+            </li>
+            <li class="vr" style="margin-left: 2px"></li>
+            <li>
+                <button title="创建一个新的流程图" onclick="createNew()">
+                    <span class="icon-plus-circled"></span>
+                </button>
+            </li>
+        </ul>
+        <!-- 下载和保存 -->
+        <ul class="io-import io-control io-control-list io-horizontal">
+            <li><a  class="download"   id="download"  title="导出并保存入库"  onclick="exportDiagram()"> <span class="icon-download"></span>
+            </a></li>
+            <li><a class="download"  title="导出SVG格式图片"  onclick="downloadSVG()"> <span class="icon-picture"></span>
+            </a></li>
+        </ul>
+        <ul class="io-import io-control io-control-list io-horizontal">
+            <li><input type="text"  style="width: 200px" id="modelName"  placeholder="请输入流程名称" ></li>
+        </ul>
+    </div>
+<script src="/static/js/bpmn/dist/static/js/chunk-vendors.eaa5559f.js"></script>
+<script src="/static/js/bpmn/dist/static/js/app.66fde437.js"></script>
+<script src="/static/js/libs/jquery-3.2.1.min.js"></script>
+<script src="/static/js/common.js"></script>
+<script src="/static/js/bpmn/dist/static/js/bpmn.js"></script>
+</body>
+</html>

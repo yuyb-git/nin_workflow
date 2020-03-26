@@ -46,6 +46,13 @@ public class BpmnController extends BaseController {
     @Resource
     ObjectMapper objectMapper;
 
+    @RequestMapping("/bpmn")
+    public ModelAndView bpmn() {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("/bpmn/bpmn");
+        return mv;
+    }
+
     @RequestMapping("/add")
     public ModelAndView add() {
         ModelAndView mv = new ModelAndView();
