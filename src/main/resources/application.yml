@@ -64,6 +64,9 @@ spring:
     history-level: full
     #校验流程文件，默认校验resources下的processes文件夹里的流程文件
     check-process-definitions: false
+    #自定义流程文件位置
+    process-definition-location-prefix: classpath:/processes/
+    process-definition-location-suffixes: .bpmn
 
 app:
   bpmn-path: /processes

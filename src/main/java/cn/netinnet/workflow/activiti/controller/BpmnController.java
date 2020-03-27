@@ -14,6 +14,7 @@ import com.github.pagehelper.PageInfo;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Model;
+import org.activiti.image.impl.ProcessDiagramSVGGraphics2D;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -89,8 +90,8 @@ public class BpmnController extends BaseController {
         String fileName = bpmnPath + modelName + ".bpmn";
         Document document = DocumentHelper.parseText(bpmnXml);
         StringUtilForFile.outputXml(document, fileName);
-
         //上传原图片
+        //new ProcessDiagramSVGGraphics2D(document);
         //ImageUtil.imageUpload(bpmnPath, file, modelName);
         ObjectNode modelObjectNode = objectMapper.createObjectNode();
         //保存act_re_model
@@ -112,6 +113,18 @@ public class BpmnController extends BaseController {
         bpmn.setCreateTime(new Date());
         workflowBpmnModelService.insertSelective(bpmn, user.getId());
         return HttpResultEntry.ok("保存成功", bpmn.getModelId());
+    }
+
+    @RequestMapping("/upload")
+    public HttpResultEntry upload(@RequestParam("file") MultipartFile file, String modelName,
+                                  HttpServletRequest request) {
+        String bpmnPath = (String)request.getServletContext().getAttribute("bpmnPath");
+        if(!bpmnPath.endsWith(File.separator)) {
+            bpmnPath += File.separator;
+        }
+        bpmnPath = StringUtilForFile.getAbsolutePath(bpmnPath);
+        ImageUtil.imageUpload(bpmnPath, file, modelName);
+        return HttpResultEntry.ok();
     }
 
     @RequestMapping("/list")

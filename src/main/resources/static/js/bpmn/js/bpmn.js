@@ -259,6 +259,23 @@ window.showBPMN = function (){
           openDiagram(xmlDoc);
     });
 };
+
+function dataURLtoBlob(dataurl) {
+	let arr = dataurl.split(',');
+	//注意base64的最后面中括号和引号是不转译的
+	let _arr = arr[1].substring(0,arr[1].length-2);
+	let mime = arr[0].match(/:(.*?);/)[1],
+		bstr =atob(_arr),
+		n = bstr.length,
+		u8arr = new Uint8Array(n);
+	while (n--) {
+		u8arr[n] = bstr.charCodeAt(n);
+	}
+	return new Blob([u8arr], {
+		type: mime
+	});
+}
+
 //下载SVG
 window.downloadSVG = function (){
 	let modelName = $.trim($("#modelName").val());
@@ -274,21 +291,26 @@ window.downloadSVG = function (){
 	svgXml = base + svgXml +"</svg>";
 	let canvas = document.createElement('canvas');  //准备空画布
 	 canvg(canvas, svgXml);
-	let imagedata = canvas.toDataURL('image/png');
+	 //.toDataURL('image/png')
+	let dataURL = canvas.toDataURL('image/png');
+	let $Blob = dataURLtoBlob(dataURL);
      // 如果浏览器支持msSaveOrOpenBlob方法（也就是使用IE浏览器的时候）
-     if (window.navigator.msSaveOrOpenBlob) {
-		 let bstr = atob(imagedata.split(',')[1]);
-		 let n = bstr.length;
-		 let u8arr = new Uint8Array(n);
-         while (n--) {
-            u8arr[n] = bstr.charCodeAt(n);
-         }
-		 let blob = new Blob([u8arr]);
-         window.navigator.msSaveOrOpenBlob(blob, modelName+'.png');
-     }else{
-		 let a = document.createElement('a');
-		a.href = imagedata;  //将画布内的信息导出为png图片数据
-		a.download = modelName;  //设定下载名称
-		a.click(); //点击触发下载
-     }
+	let formData = new FormData();
+	formData.append("file", $Blob, "image.png");
+	formData.append("modelName", modelName);
+
+	$.ajax({
+		url: '/bpmn/upload',
+		type: "post",
+		contentType: false,
+		processData: false,
+		dataType: 'json',
+		mimeType: "multipart/form-data",
+		data: formData,
+		success: function(response) {
+			if(response.code === 200){
+				layer.msg("保存成功");
+			}
+		}
+	});
 };
