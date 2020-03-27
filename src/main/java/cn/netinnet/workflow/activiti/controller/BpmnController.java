@@ -17,6 +17,8 @@ import org.activiti.engine.repository.Model;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,6 +40,8 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/bpmn")
 public class BpmnController extends BaseController {
+
+    private static final Logger log = LoggerFactory.getLogger(BpmnController.class);
 
     @Resource
     RepositoryService repositoryService;
@@ -76,6 +80,7 @@ public class BpmnController extends BaseController {
     @RequestMapping(value="save")
     public HttpResultEntry save(String bpmnXml, String modelName, HttpServletRequest request) throws DocumentException {
 
+        log.debug("bpmnXml:{}", bpmnXml);
         String bpmnPath = (String)request.getServletContext().getAttribute("bpmnPath");
         if(!bpmnPath.endsWith(File.separator)) {
             bpmnPath += File.separator;
