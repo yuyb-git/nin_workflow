@@ -260,6 +260,22 @@ window.showBPMN = function (){
     });
 };
 
+/**
+ * base64 转 blob 对象，文件上传
+ * @param dataURI
+ * @returns {Blob}
+ */
+function dataURItoBlob(dataURI) {
+    var byteString = atob(dataURI.split(',')[1]);
+    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+    var ab = new ArrayBuffer(byteString.length);
+    var ia = new Uint8Array(ab);
+    for (var i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], {type: mimeString});
+}
+
 function dataURLtoBlob(dataurl) {
 	let arr = dataurl.split(',');
 	//注意base64的最后面中括号和引号是不转译的
@@ -293,7 +309,7 @@ window.downloadSVG = function (){
 	 canvg(canvas, svgXml);
 	 //.toDataURL('image/png')
 	let dataURL = canvas.toDataURL('image/png');
-	let $Blob = dataURLtoBlob(dataURL);
+	let $Blob = dataURItoBlob(dataURL);
      // 如果浏览器支持msSaveOrOpenBlob方法（也就是使用IE浏览器的时候）
 	let formData = new FormData();
 	formData.append("file", $Blob, "image.png");

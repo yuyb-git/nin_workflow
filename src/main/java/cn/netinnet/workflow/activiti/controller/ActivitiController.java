@@ -69,6 +69,13 @@ public class ActivitiController {
         return mv;
     }
 
+    @RequestMapping(value = "leave")
+    public ModelAndView leave(HttpSession session){
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("model/qjd");
+        return mv;
+    }
+
     @RequestMapping(value = "excel")
     public ModelAndView spreadSheet(HttpSession session){
         ModelAndView mv = new ModelAndView();
