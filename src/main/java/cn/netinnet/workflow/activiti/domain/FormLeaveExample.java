@@ -1064,6 +1064,146 @@ public class FormLeaveExample {
             addCriterion("manager_opinion not between", value1, value2, "managerOpinion");
             return (Criteria) this;
         }
+
+        public Criteria andDescrIsNull() {
+            addCriterion("descr is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescrIsNotNull() {
+            addCriterion("descr is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescrEqualTo(String value) {
+            addCriterion("descr =", value, "descr");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescrNotEqualTo(String value) {
+            addCriterion("descr <>", value, "descr");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescrGreaterThan(String value) {
+            addCriterion("descr >", value, "descr");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescrGreaterThanOrEqualTo(String value) {
+            addCriterion("descr >=", value, "descr");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescrLessThan(String value) {
+            addCriterion("descr <", value, "descr");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescrLessThanOrEqualTo(String value) {
+            addCriterion("descr <=", value, "descr");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescrLike(String value) {
+            addCriterion("descr like", value, "descr");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescrNotLike(String value) {
+            addCriterion("descr not like", value, "descr");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescrIn(List<String> values) {
+            addCriterion("descr in", values, "descr");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescrNotIn(List<String> values) {
+            addCriterion("descr not in", values, "descr");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescrBetween(String value1, String value2) {
+            addCriterion("descr between", value1, value2, "descr");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescrNotBetween(String value1, String value2) {
+            addCriterion("descr not between", value1, value2, "descr");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessInstanceIdIsNull() {
+            addCriterion("process_instance_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessInstanceIdIsNotNull() {
+            addCriterion("process_instance_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessInstanceIdEqualTo(String value) {
+            addCriterion("process_instance_id =", value, "processInstanceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessInstanceIdNotEqualTo(String value) {
+            addCriterion("process_instance_id <>", value, "processInstanceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessInstanceIdGreaterThan(String value) {
+            addCriterion("process_instance_id >", value, "processInstanceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessInstanceIdGreaterThanOrEqualTo(String value) {
+            addCriterion("process_instance_id >=", value, "processInstanceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessInstanceIdLessThan(String value) {
+            addCriterion("process_instance_id <", value, "processInstanceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessInstanceIdLessThanOrEqualTo(String value) {
+            addCriterion("process_instance_id <=", value, "processInstanceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessInstanceIdLike(String value) {
+            addCriterion("process_instance_id like", value, "processInstanceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessInstanceIdNotLike(String value) {
+            addCriterion("process_instance_id not like", value, "processInstanceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessInstanceIdIn(List<String> values) {
+            addCriterion("process_instance_id in", values, "processInstanceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessInstanceIdNotIn(List<String> values) {
+            addCriterion("process_instance_id not in", values, "processInstanceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessInstanceIdBetween(String value1, String value2) {
+            addCriterion("process_instance_id between", value1, value2, "processInstanceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessInstanceIdNotBetween(String value1, String value2) {
+            addCriterion("process_instance_id not between", value1, value2, "processInstanceId");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

@@ -89,7 +89,17 @@ public class FormLeave implements Serializable {
      */
     private String managerOpinion;
 
-    private static final long serialVersionUID = 6518011248511255552L;
+    /**
+     * 备注
+     */
+    private String descr;
+
+    /**
+     * 流程实例id
+     */
+    private String processInstanceId;
+
+    private static final long serialVersionUID = 4122438179587104768L;
 
     /**
      * 获取id
@@ -361,6 +371,42 @@ public class FormLeave implements Serializable {
         this.managerOpinion = managerOpinion;
     }
 
+    /**
+     * 获取备注
+     *
+     * @return descr - 备注
+     */
+    public String getDescr() {
+        return descr;
+    }
+
+    /**
+     * 设置备注
+     *
+     * @param descr 备注
+     */
+    public void setDescr(String descr) {
+        this.descr = descr;
+    }
+
+    /**
+     * 获取流程实例id
+     *
+     * @return process_instance_id - 流程实例id
+     */
+    public String getProcessInstanceId() {
+        return processInstanceId;
+    }
+
+    /**
+     * 设置流程实例id
+     *
+     * @param processInstanceId 流程实例id
+     */
+    public void setProcessInstanceId(String processInstanceId) {
+        this.processInstanceId = processInstanceId;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -382,6 +428,8 @@ public class FormLeave implements Serializable {
         sb.append(", reason=").append(reason);
         sb.append(", leaderOpinion=").append(leaderOpinion);
         sb.append(", managerOpinion=").append(managerOpinion);
+        sb.append(", descr=").append(descr);
+        sb.append(", processInstanceId=").append(processInstanceId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

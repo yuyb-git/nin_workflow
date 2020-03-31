@@ -17,6 +17,8 @@
     <result column="reason" jdbcType="VARCHAR" property="reason" />
     <result column="leader_opinion" jdbcType="VARCHAR" property="leaderOpinion" />
     <result column="manager_opinion" jdbcType="VARCHAR" property="managerOpinion" />
+    <result column="descr" jdbcType="VARCHAR" property="descr" />
+    <result column="process_instance_id" jdbcType="VARCHAR" property="processInstanceId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -79,7 +81,7 @@
   <sql id="Base_Column_List">
     form_id, form_no, leaver_id, leaver_name, leaver_dept_id, leaver_dept, leave_type, 
     leave_start, leave_end, leave_day, leave_hour, approve_result, reason, leader_opinion, 
-    manager_opinion
+    manager_opinion, descr, process_instance_id
   </sql>
   <select id="selectByExample" parameterType="cn.netinnet.workflow.activiti.domain.FormLeaveExample" resultMap="BaseResultMap">
     select
@@ -165,6 +167,12 @@
       <if test="record.managerOpinion != null">
         manager_opinion = #{record.managerOpinion,jdbcType=VARCHAR},
       </if>
+      <if test="record.descr != null">
+        descr = #{record.descr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.processInstanceId != null">
+        process_instance_id = #{record.processInstanceId,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -186,7 +194,9 @@
       approve_result = #{record.approveResult,jdbcType=TINYINT},
       reason = #{record.reason,jdbcType=VARCHAR},
       leader_opinion = #{record.leaderOpinion,jdbcType=VARCHAR},
-      manager_opinion = #{record.managerOpinion,jdbcType=VARCHAR}
+      manager_opinion = #{record.managerOpinion,jdbcType=VARCHAR},
+      descr = #{record.descr,jdbcType=VARCHAR},
+      process_instance_id = #{record.processInstanceId,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -236,13 +246,19 @@
       <if test="managerOpinion != null">
         manager_opinion = #{managerOpinion,jdbcType=VARCHAR},
       </if>
+      <if test="descr != null">
+        descr = #{descr,jdbcType=VARCHAR},
+      </if>
+      <if test="processInstanceId != null">
+        process_instance_id = #{processInstanceId,jdbcType=VARCHAR},
+      </if>
     </set>
     where form_id = #{formId,jdbcType=BIGINT}
   </update>
   <sql id="sql_columns">
     insert into form_leave
 	<trim prefix="(" suffix=") values" suffixOverrides=",">
-		form_id,form_no,leaver_id,leaver_name,leaver_dept_id,leaver_dept,leave_type,leave_start,leave_end,leave_day,leave_hour,approve_result,reason,leader_opinion,manager_opinion,
+		form_id,form_no,leaver_id,leaver_name,leaver_dept_id,leaver_dept,leave_type,leave_start,leave_end,leave_day,leave_hour,approve_result,reason,leader_opinion,manager_opinion,descr,process_instance_id,
 	</trim>
   </sql>
   <sql id="sql_values">
@@ -262,6 +278,8 @@
 		, #{item.reason}
 		, #{item.leaderOpinion}
 		, #{item.managerOpinion}
+		, #{item.descr}
+		, #{item.processInstanceId}
 	</trim>	
   </sql>
   <sql id="sql_where">
@@ -281,6 +299,8 @@
 		<if test="null != item.reason">and reason = #{item.reason}</if>
 		<if test="null != item.leaderOpinion">and leader_opinion = #{item.leaderOpinion}</if>
 		<if test="null != item.managerOpinion">and manager_opinion = #{item.managerOpinion}</if>
+		<if test="null != item.descr">and descr = #{item.descr}</if>
+		<if test="null != item.processInstanceId">and process_instance_id = #{item.processInstanceId}</if>
 	</where>
   </sql>
   <sql id="sql_update">
@@ -301,6 +321,8 @@
 		<if test="null != item.reason">, reason = #{item.reason}</if>
 		<if test="null != item.leaderOpinion">, leader_opinion = #{item.leaderOpinion}</if>
 		<if test="null != item.managerOpinion">, manager_opinion = #{item.managerOpinion}</if>
+		<if test="null != item.descr">, descr = #{item.descr}</if>
+		<if test="null != item.processInstanceId">, process_instance_id = #{item.processInstanceId}</if>
 	</trim>
 	where  form_id = #{item.formId}
   </sql>
@@ -322,6 +344,8 @@
 		<if test="null != list[0].reason">, reason</if>
 		<if test="null != list[0].leaderOpinion">, leader_opinion</if>
 		<if test="null != list[0].managerOpinion">, manager_opinion</if>
+		<if test="null != list[0].descr">, descr</if>
+		<if test="null != list[0].processInstanceId">, process_instance_id</if>
 	</trim>	
   </sql>
   <sql id="sql_save_values">
@@ -341,6 +365,8 @@
 		<if test="null != item.reason">, #{item.reason}</if>
 		<if test="null != item.leaderOpinion">, #{item.leaderOpinion}</if>
 		<if test="null != item.managerOpinion">, #{item.managerOpinion}</if>
+		<if test="null != item.descr">, #{item.descr}</if>
+		<if test="null != item.processInstanceId">, #{item.processInstanceId}</if>
 	</trim>	
   </sql>
   <insert id="batchInsert" parameterType="java.util.List">
@@ -378,6 +404,8 @@
 		<if test="null != reason"> reason,</if>
 		<if test="null != leaderOpinion"> leader_opinion,</if>
 		<if test="null != managerOpinion"> manager_opinion,</if>
+		<if test="null != descr"> descr,</if>
+		<if test="null != processInstanceId"> process_instance_id,</if>
 	</trim>
 	 <trim prefix=" values(" suffix=")" suffixOverrides=",">
 		<if test="null != formId"> #{formId,jdbcType=BIGINT},</if>
@@ -395,6 +423,8 @@
 		<if test="null != reason"> #{reason,jdbcType=VARCHAR},</if>
 		<if test="null != leaderOpinion"> #{leaderOpinion,jdbcType=VARCHAR},</if>
 		<if test="null != managerOpinion"> #{managerOpinion,jdbcType=VARCHAR},</if>
+		<if test="null != descr"> #{descr,jdbcType=VARCHAR},</if>
+		<if test="null != processInstanceId"> #{processInstanceId,jdbcType=VARCHAR},</if>
 	</trim>
   </insert>
   <delete id="batchDeleteByArray">
@@ -406,7 +436,7 @@
 	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
   </delete>
   <select id="getList" parameterType="cn.netinnet.workflow.activiti.domain.FormLeave" resultMap="BaseResultMap">
-     select form_id,form_no, leaver_id, leaver_name, leaver_dept_id, leaver_dept, leave_type, leave_start, leave_end, leave_day, leave_hour, approve_result, reason, leader_opinion, manager_opinion from form_leave
+     select form_id,form_no, leaver_id, leaver_name, leaver_dept_id, leaver_dept, leave_type, leave_start, leave_end, leave_day, leave_hour, approve_result, reason, leader_opinion, manager_opinion, descr, process_instance_id from form_leave
     <include refid="sql_where" />
   </select>
 </mapper>
