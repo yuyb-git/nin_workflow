@@ -732,6 +732,7 @@ CREATE TABLE `workflow_role` (
                                  `role_id` bigint(18) unsigned NOT NULL,
                                  `role_code` varchar(10) NOT NULL DEFAULT '',
                                  `role_name` varchar(10) NOT NULL DEFAULT '',
+                                 `role_permission` varchar(1000) NOT NULL DEFAULT '' COMMENT '角色权限',
                                  PRIMARY KEY (`role_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

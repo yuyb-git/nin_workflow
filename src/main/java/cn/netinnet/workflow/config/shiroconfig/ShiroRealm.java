@@ -5,15 +5,24 @@ import cn.netinnet.workflow.user.dao.WorkflowRoleMapper;
 import cn.netinnet.workflow.user.dao.WorkflowUserMapper;
 import cn.netinnet.workflow.user.domain.WorkflowRole;
 import cn.netinnet.workflow.user.domain.WorkflowUser;
+import cn.netinnet.workflow.util.MD5Utils;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.ByteSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
+
 import javax.annotation.Resource;
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Copyright © 厦门网中网软件有限公司.
@@ -40,12 +49,28 @@ public class ShiroRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         // 获取用户
-        WorkflowUser user = (WorkflowUser) principalCollection.getPrimaryPrincipal();
-        String roleCode = user.getRoleCode();
+        List key =  principalCollection.asList();
+        Map<String, Object> user = new HashMap<>();
+
+        try {
+            if (key.size() > 0) {
+                user = BeanUtils.describe(key.get(0));
+            } else {
+                return null;
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+
+        String roleCode = user.get("roleCode").toString();
 
         // 这里进行授权和处理
 
-        /*WorkflowRole workflowRole = workflowRoleMapper.getRolePermissionByCode(roleCode);
+        WorkflowRole workflowRole = workflowRoleMapper.getRolePermissionByCode(roleCode);
         String roleName = workflowRole.getRoleName();
 
         authorizationInfo.addRole(roleName);
@@ -54,7 +79,7 @@ public class ShiroRealm extends AuthorizingRealm {
         String[] permissionStr = permissions.split(",");
         for (String right : permissionStr) {
             authorizationInfo.addStringPermission(right);
-        }*/
+        }
         logger.info("赋予角色和权限成功！");
 
         return authorizationInfo;
@@ -81,12 +106,11 @@ public class ShiroRealm extends AuthorizingRealm {
             return null;
         }
 
-        logger.info("password：" + password);
-        if (!password.equals(workflowUser.getPassword())) {
+        if (!MD5Utils.getSaltverifyMD5(password, workflowUser.getPassword())) {
             throw new IncorrectCredentialsException("用户名或密码错误!");
         }
 
-        return null;
+        return new SimpleAuthenticationInfo(workflowUser, password, ByteSource.Util.bytes(userName), getName());
 
     }
 

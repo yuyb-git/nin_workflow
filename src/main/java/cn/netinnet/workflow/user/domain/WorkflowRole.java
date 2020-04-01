@@ -2,16 +2,15 @@
  * WorkflowRole.java
  * Copyright(c) 2017-2018 厦门网中网软件有限公司
  * All right reserved.
- * 2020-03-06 Created
+ * 2020-03-12 Created
  */
 package cn.netinnet.workflow.user.domain;
 
 import java.io.Serializable;
-import java.util.Set;
 
 /**
  * @author admin
- * @date   2020-03-06
+ * @date   2020-03-12
  **/
 public class WorkflowRole implements Serializable {
     private Long roleId;
@@ -19,10 +18,13 @@ public class WorkflowRole implements Serializable {
     private String roleCode;
 
     private String roleName;
-    
-    private Set<WorkflowPermission> permissions;
 
-    private static final long serialVersionUID = 8332465084433347584L;
+    /**
+     * 角色权限
+     */
+    private String rolePermission;
+
+    private static final long serialVersionUID = 3912049177494724608L;
 
     /**
      * @return role_id
@@ -66,15 +68,25 @@ public class WorkflowRole implements Serializable {
         this.roleName = roleName;
     }
 
-    public Set<WorkflowPermission> getPermissions() {
-		return permissions;
-	}
+    /**
+     * 获取角色权限
+     *
+     * @return role_permission - 角色权限
+     */
+    public String getRolePermission() {
+        return rolePermission;
+    }
 
-	public void setPermissions(Set<WorkflowPermission> permissions) {
-		this.permissions = permissions;
-	}
+    /**
+     * 设置角色权限
+     *
+     * @param rolePermission 角色权限
+     */
+    public void setRolePermission(String rolePermission) {
+        this.rolePermission = rolePermission;
+    }
 
-	@Override
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(getClass().getSimpleName());
@@ -83,6 +95,7 @@ public class WorkflowRole implements Serializable {
         sb.append(", roleId=").append(roleId);
         sb.append(", roleCode=").append(roleCode);
         sb.append(", roleName=").append(roleName);
+        sb.append(", rolePermission=").append(rolePermission);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

@@ -2,7 +2,7 @@
  * WorkflowRoleExample.java
  * Copyright(c) 2017-2018 厦门网中网软件有限公司
  * All right reserved.
- * 2020-03-06 Created
+ * 2020-03-12 Created
  */
 package cn.netinnet.workflow.user.domain;
 
@@ -71,7 +71,7 @@ public class WorkflowRoleExample {
 
     /**
      * @author admin
-     * @date   2020-03-06
+     * @date   2020-03-12
      */
     protected abstract static class GeneratedCriteria {
         protected List<Criterion> criteria;
@@ -313,6 +313,76 @@ public class WorkflowRoleExample {
             addCriterion("role_name not between", value1, value2, "roleName");
             return (Criteria) this;
         }
+
+        public Criteria andRolePermissionIsNull() {
+            addCriterion("role_permission is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRolePermissionIsNotNull() {
+            addCriterion("role_permission is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRolePermissionEqualTo(String value) {
+            addCriterion("role_permission =", value, "rolePermission");
+            return (Criteria) this;
+        }
+
+        public Criteria andRolePermissionNotEqualTo(String value) {
+            addCriterion("role_permission <>", value, "rolePermission");
+            return (Criteria) this;
+        }
+
+        public Criteria andRolePermissionGreaterThan(String value) {
+            addCriterion("role_permission >", value, "rolePermission");
+            return (Criteria) this;
+        }
+
+        public Criteria andRolePermissionGreaterThanOrEqualTo(String value) {
+            addCriterion("role_permission >=", value, "rolePermission");
+            return (Criteria) this;
+        }
+
+        public Criteria andRolePermissionLessThan(String value) {
+            addCriterion("role_permission <", value, "rolePermission");
+            return (Criteria) this;
+        }
+
+        public Criteria andRolePermissionLessThanOrEqualTo(String value) {
+            addCriterion("role_permission <=", value, "rolePermission");
+            return (Criteria) this;
+        }
+
+        public Criteria andRolePermissionLike(String value) {
+            addCriterion("role_permission like", value, "rolePermission");
+            return (Criteria) this;
+        }
+
+        public Criteria andRolePermissionNotLike(String value) {
+            addCriterion("role_permission not like", value, "rolePermission");
+            return (Criteria) this;
+        }
+
+        public Criteria andRolePermissionIn(List<String> values) {
+            addCriterion("role_permission in", values, "rolePermission");
+            return (Criteria) this;
+        }
+
+        public Criteria andRolePermissionNotIn(List<String> values) {
+            addCriterion("role_permission not in", values, "rolePermission");
+            return (Criteria) this;
+        }
+
+        public Criteria andRolePermissionBetween(String value1, String value2) {
+            addCriterion("role_permission between", value1, value2, "rolePermission");
+            return (Criteria) this;
+        }
+
+        public Criteria andRolePermissionNotBetween(String value1, String value2) {
+            addCriterion("role_permission not between", value1, value2, "rolePermission");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
@@ -324,7 +394,7 @@ public class WorkflowRoleExample {
 
     /**
      * @author admin
-     * @date   2020-03-06
+     * @date   2020-03-12
      */
     public static class Criterion {
         private String condition;

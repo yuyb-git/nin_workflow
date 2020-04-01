@@ -49,7 +49,7 @@ public class ShiroConfig {
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         filterChainDefinitionMap.put("/login", "anon");
 
-        filterChainDefinitionMap.put("/fsscAdminRole/**", "authc");
+        filterChainDefinitionMap.put("/index", "authc");
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;

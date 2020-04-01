@@ -5,6 +5,7 @@
     <id column="role_id" jdbcType="BIGINT" property="roleId" />
     <result column="role_code" jdbcType="VARCHAR" property="roleCode" />
     <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+    <result column="role_permission" jdbcType="VARCHAR" property="rolePermission" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -65,7 +66,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    role_id, role_code, role_name
+    role_id, role_code, role_name, role_permission
   </sql>
   <select id="selectByExample" parameterType="cn.netinnet.workflow.user.domain.WorkflowRoleExample" resultMap="BaseResultMap">
     select
@@ -115,6 +116,9 @@
       <if test="record.roleName != null">
         role_name = #{record.roleName,jdbcType=VARCHAR},
       </if>
+      <if test="record.rolePermission != null">
+        role_permission = #{record.rolePermission,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -124,7 +128,8 @@
     update workflow_role
     set role_id = #{record.roleId,jdbcType=BIGINT},
       role_code = #{record.roleCode,jdbcType=VARCHAR},
-      role_name = #{record.roleName,jdbcType=VARCHAR}
+      role_name = #{record.roleName,jdbcType=VARCHAR},
+      role_permission = #{record.rolePermission,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -138,13 +143,16 @@
       <if test="roleName != null">
         role_name = #{roleName,jdbcType=VARCHAR},
       </if>
+      <if test="rolePermission != null">
+        role_permission = #{rolePermission,jdbcType=VARCHAR},
+      </if>
     </set>
     where role_id = #{roleId,jdbcType=BIGINT}
   </update>
   <sql id="sql_columns">
     insert into workflow_role
 	<trim prefix="(" suffix=") values" suffixOverrides=",">
-		role_id,role_code,role_name,
+		role_id,role_code,role_name,role_permission,
 	</trim>
   </sql>
   <sql id="sql_values">
@@ -152,6 +160,7 @@
 		, #{item.roleId}
 		, #{item.roleCode}
 		, #{item.roleName}
+		, #{item.rolePermission}
 	</trim>	
   </sql>
   <sql id="sql_where">
@@ -159,6 +168,7 @@
 		<if test="null != item.roleId">and role_id = #{item.roleId}</if>
 		<if test="null != item.roleCode">and role_code = #{item.roleCode}</if>
 		<if test="null != item.roleName">and role_name = #{item.roleName}</if>
+		<if test="null != item.rolePermission">and role_permission = #{item.rolePermission}</if>
 	</where>
   </sql>
   <sql id="sql_update">
@@ -167,6 +177,7 @@
 		<if test="null != item.roleId">, role_id = #{item.roleId}</if>
 		<if test="null != item.roleCode">, role_code = #{item.roleCode}</if>
 		<if test="null != item.roleName">, role_name = #{item.roleName}</if>
+		<if test="null != item.rolePermission">, role_permission = #{item.rolePermission}</if>
 	</trim>
 	where  role_id = #{item.roleId}
   </sql>
@@ -176,6 +187,7 @@
 		<if test="null != list[0].roleId">, role_id</if>
 		<if test="null != list[0].roleCode">, role_code</if>
 		<if test="null != list[0].roleName">, role_name</if>
+		<if test="null != list[0].rolePermission">, role_permission</if>
 	</trim>	
   </sql>
   <sql id="sql_save_values">
@@ -183,6 +195,7 @@
 		<if test="null != item.roleId">, #{item.roleId}</if>
 		<if test="null != item.roleCode">, #{item.roleCode}</if>
 		<if test="null != item.roleName">, #{item.roleName}</if>
+		<if test="null != item.rolePermission">, #{item.rolePermission}</if>
 	</trim>	
   </sql>
   <insert id="batchInsert" parameterType="java.util.List">
@@ -208,11 +221,13 @@
 		<if test="null != roleId"> role_id,</if>
 		<if test="null != roleCode"> role_code,</if>
 		<if test="null != roleName"> role_name,</if>
+		<if test="null != rolePermission"> role_permission,</if>
 	</trim>
 	 <trim prefix=" values(" suffix=")" suffixOverrides=",">
 		<if test="null != roleId"> #{roleId,jdbcType=BIGINT},</if>
 		<if test="null != roleCode"> #{roleCode,jdbcType=VARCHAR},</if>
 		<if test="null != roleName"> #{roleName,jdbcType=VARCHAR},</if>
+		<if test="null != rolePermission"> #{rolePermission,jdbcType=VARCHAR},</if>
 	</trim>
   </insert>
   <delete id="batchDeleteByArray">
@@ -224,7 +239,17 @@
 	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
   </delete>
   <select id="getList" parameterType="cn.netinnet.workflow.user.domain.WorkflowRole" resultMap="BaseResultMap">
-     select role_id,role_code, role_name from workflow_role
+     select role_id,role_code, role_name, role_permission from workflow_role
     <include refid="sql_where" />
+  </select>
+
+  <!-- 根据roleCode获取角色的权限信息 -->
+  <select id="getRolePermissionByCode" resultMap="BaseResultMap">
+     select
+      role_id,
+      role_name,
+      role_permission
+     from workflow_role
+     where role_code = #{roleCode}
   </select>
 </mapper>

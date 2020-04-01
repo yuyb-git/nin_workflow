@@ -5,6 +5,10 @@ import cn.netinnet.workflow.common.global.HttpResultEntry;
 import cn.netinnet.workflow.user.domain.WorkflowUser;
 import cn.netinnet.workflow.user.service.WorkflowUserService;
 import cn.netinnet.workflow.util.MD5Utils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.subject.Subject;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,6 +53,11 @@ public class LoginController extends BaseController {
             return HttpResultEntry.error("用户不存在");
         }else {
             if(MD5Utils.getSaltverifyMD5(password, user.getPassword())) {
+
+                UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+                Subject currentUser = SecurityUtils.getSubject();
+                currentUser.login(token);
+
                 request.getSession().setAttribute("user", user);
                 return HttpResultEntry.ok();
             }else {
