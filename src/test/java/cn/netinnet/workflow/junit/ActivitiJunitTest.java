@@ -7,6 +7,7 @@ import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricActivityInstance;
+import org.activiti.engine.history.HistoricActivityInstanceQuery;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.util.ProcessDefinitionUtil;
 import org.activiti.engine.repository.Deployment;
@@ -48,9 +49,10 @@ public class ActivitiJunitTest extends BaseTest {
     public void deploy() {
 
         Deployment deployment = repositoryService.createDeployment()//创建一个部署对象
+                .disableSchemaValidation()
                 .name("请假流程")
-                .addClasspathResource("processes/leaveProcess.bpmn")
-                .addClasspathResource("processes/leaveProcess.png")
+                .addClasspathResource("processes/leave.bpmn")
+                .addClasspathResource("processes/leave.png")
                 .deploy();
         System.out.println("部署ID："+deployment.getId());
         System.out.println("部署名称："+deployment.getName());
@@ -66,11 +68,12 @@ public class ActivitiJunitTest extends BaseTest {
         //`act_ru_task表的EXECUTION_ID_``PROC_INST_ID_`分别为act_ru_execution的两条记录主键
         // 生成运行时流程执行实例表：act_ru_execution、
         // 生成运行时变量表：act_ru_variable
-        String id = "myProcess_1:1:5869e9ee-6767-11ea-acd5-18dbf2291890";
+        String id = "conditionProcess:1:86f04170-73f7-11ea-8589-18dbf2291890";
         Map<String, Object> map = new HashMap<>();
-        map.put("assignee0", "张三");
-        map.put("assignee1", "李四");
-        map.put("assignee2", "王五");
+        map.put("assignee", "123");
+        map.put("day", "5");
+        //map.put("assignee1", "李四");
+        //map.put("assignee2", "王五");
         ProcessInstance process = runtimeService.startProcessInstanceById(id, map);
         System.out.println("流程id：" + process.getId());
         System.out.println("流程定义id：" + process.getProcessDefinitionId());
@@ -117,19 +120,29 @@ public class ActivitiJunitTest extends BaseTest {
      * @return void
      **/
     @Test
+    @Rollback(false)
     public void findPersonalTaskList() {
-        String processDefinitionKey = "holiday2";
-        String assignee = "赵六";
+        String processDefinitionKey = "conditionProcess";
+        String assignee = "李四";
         List<Task> taskList = taskService.createTaskQuery()
                 .processDefinitionKey(processDefinitionKey)
                 .includeProcessVariables().taskAssignee(assignee).list();
+        System.out.println(assignee+"的任务数：" + taskList.size());
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("assignee", "123");
+        //map.put("day", "5");
 
         for (Task task : taskList) {
+            //task.setAssignee("123");
             System.out.println("--------------------------------------");
             System.out.println("流程实例id:" + task.getProcessInstanceId());
             System.out.println("任务id:" + task.getId());
             System.out.println("任务负责人:" + task.getAssignee());
             System.out.println("任务名称:" + task.getName());
+            taskService.setVariables(task.getId(), map);
+            taskService.complete(task.getId());
+            //taskService.saveTask(task);
         }
     }
 
@@ -155,15 +168,14 @@ public class ActivitiJunitTest extends BaseTest {
         Map<String, List<ExtensionAttribute>> map = flowElement.getAttributes();
         BpmnModel bpmnModel2 = repositoryService.getBpmnModel(processDefinition.getId());
         String processInstanceId = processInstance.getId();
-        historyService.createHistoricActivityInstanceQuery().processInstanceId(processInstanceId);
-        //获取当前流程定义中的活动节点(包括开始和结束节点)
-        //ActivityImpl activityImpl = processDefinition.findActivity(activityId);
-        //获取输出的flow
-        //List<PvmTransition> transitionList = activityImpl.getOutgoingTransitions();//改为getIncomingTransitions()就是获取income的连接线
-        /*for(PvmTransition transition: transitionList){
-            String flowName = (String) transition.getProperty("name");
-            System.out.println(flowName);
-        }*/
+        HistoricActivityInstanceQuery historicActivityInstanceQuery = historyService
+                .createHistoricActivityInstanceQuery().processInstanceId(processInstanceId);
+        //根据流程开始进行的时间来排序
+        List<HistoricActivityInstance> list = historicActivityInstanceQuery
+                .orderByHistoricActivityInstanceStartTime()
+                .asc()
+                .list();
+
     }
 
 

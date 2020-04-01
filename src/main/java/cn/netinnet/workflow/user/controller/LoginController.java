@@ -5,10 +5,7 @@ import cn.netinnet.workflow.common.global.HttpResultEntry;
 import cn.netinnet.workflow.user.domain.WorkflowUser;
 import cn.netinnet.workflow.user.service.WorkflowUserService;
 import cn.netinnet.workflow.util.MD5Utils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
@@ -50,7 +47,7 @@ public class LoginController extends BaseController {
         return mv;
     }
 
-    @GetMapping(value="login")
+    @PostMapping(value="login")
     public HttpResultEntry login(String username, String password, HttpServletRequest request) {
         WorkflowUser user = workflowUserService.getWorkflowUserByName(username);
         if(user==null) {
