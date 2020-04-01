@@ -1,9 +1,14 @@
 package cn.netinnet.workflow.junit;
 
 import cn.netinnet.workflow.BaseTest;
+import org.activiti.bpmn.model.*;
+import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.history.HistoricActivityInstance;
+import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import org.activiti.engine.impl.util.ProcessDefinitionUtil;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.repository.ProcessDefinitionQuery;
@@ -35,6 +40,8 @@ public class ActivitiJunitTest extends BaseTest {
     TaskService taskService;
     @Resource
     RuntimeService runtimeService;
+    @Resource
+    HistoryService historyService;
 
     @Test
     @Rollback(false)
@@ -125,5 +132,39 @@ public class ActivitiJunitTest extends BaseTest {
             System.out.println("任务名称:" + task.getName());
         }
     }
+
+    @Test
+    public void getOutcomeFlow(){
+        String assignee = "manager";
+        Task task = taskService.createTaskQuery()
+                .processDefinitionKey("ruzhi").taskAssignee(assignee).singleResult();
+        //获取流程定义实体的对象(不需要创建查询对象*****)
+        ProcessDefinitionEntity processDefinition = (ProcessDefinitionEntity) repositoryService
+                .getProcessDefinition(task.getProcessDefinitionId());
+        //获取流程实例
+        ProcessInstance processInstance = runtimeService.createProcessInstanceQuery()
+                .processInstanceId(task.getProcessInstanceId()).singleResult();
+        //获取当前流程实例的活动id
+        String activityId = processInstance.getActivityId();
+        BpmnModel bpmnModel = ProcessDefinitionUtil.getBpmnModel(processDefinition.getId());
+
+        FlowNode flowNode = (FlowNode)bpmnModel.getMainProcess().getFlowElement(activityId);
+        List<SequenceFlow> inFlows = flowNode.getIncomingFlows();
+        List<SequenceFlow> outFlows = flowNode.getOutgoingFlows();
+        FlowElement flowElement = bpmnModel.getMainProcess().getFlowElement(activityId);
+        Map<String, List<ExtensionAttribute>> map = flowElement.getAttributes();
+        BpmnModel bpmnModel2 = repositoryService.getBpmnModel(processDefinition.getId());
+        String processInstanceId = processInstance.getId();
+        historyService.createHistoricActivityInstanceQuery().processInstanceId(processInstanceId);
+        //获取当前流程定义中的活动节点(包括开始和结束节点)
+        //ActivityImpl activityImpl = processDefinition.findActivity(activityId);
+        //获取输出的flow
+        //List<PvmTransition> transitionList = activityImpl.getOutgoingTransitions();//改为getIncomingTransitions()就是获取income的连接线
+        /*for(PvmTransition transition: transitionList){
+            String flowName = (String) transition.getProperty("name");
+            System.out.println(flowName);
+        }*/
+    }
+
 
 }

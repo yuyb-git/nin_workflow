@@ -79,7 +79,7 @@ public class BpmnController extends BaseController {
         return HttpResultEntry.ok("", user);
     }
 
-    @PostMapping(value="save")
+    @GetMapping(value="save")
     @ApiOperation(value="保存bpmn模型", notes="新增bpmn模型数据")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType="query", name = "bpmnXml", value = "bpmnXml", required = true, dataType = "String"),
