@@ -45,6 +45,10 @@ public class CustomWebMvcConfigurerAdapter extends WebMvcConfigurationSupport {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         //自定义项目内目录
         registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
+        registry.addResourceHandler("swagger-ui.html").addResourceLocations(
+                "classpath:/META-INF/resources/");
+        registry.addResourceHandler("/webjars/**").addResourceLocations(
+                "classpath:/META-INF/resources/webjars/");
         //指向外部目录
         // registry.addResourceHandler("/my/**").addResourceLocations("file:E:/my/");
         super.addResourceHandlers(registry);

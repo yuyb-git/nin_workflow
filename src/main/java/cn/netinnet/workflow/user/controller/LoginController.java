@@ -5,6 +5,7 @@ import cn.netinnet.workflow.common.global.HttpResultEntry;
 import cn.netinnet.workflow.user.domain.WorkflowUser;
 import cn.netinnet.workflow.user.service.WorkflowUserService;
 import cn.netinnet.workflow.util.MD5Utils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,21 +29,28 @@ public class LoginController extends BaseController {
     @Resource
     WorkflowUserService workflowUserService;
 
-    @RequestMapping("/")
+    @GetMapping(value = "/swagger")
+    public ModelAndView swagger() {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("redirect:swagger-ui.html");
+        return mv;
+    }
+
+    @GetMapping("/")
     public ModelAndView login() {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("/login");
         return mv;
     }
 
-    @RequestMapping("/index")
+    @GetMapping("/index")
     public ModelAndView index() {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("/main");
         return mv;
     }
 
-    @RequestMapping(value="login",method= RequestMethod.POST)
+    @GetMapping(value="login")
     public HttpResultEntry login(String username, String password, HttpServletRequest request) {
         WorkflowUser user = workflowUserService.getWorkflowUserByName(username);
         if(user==null) {
@@ -57,13 +65,13 @@ public class LoginController extends BaseController {
         }
     }
 
-    @RequestMapping(value="getUser")
+    @GetMapping(value="getUser")
     public HttpResultEntry getUser(HttpServletRequest request){
         WorkflowUser user =  (WorkflowUser) request.getSession().getAttribute("user");
         return HttpResultEntry.ok("操作成功", user);
     }
 
-    @RequestMapping(value="logout")
+    @GetMapping(value="logout")
     public void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.getSession().invalidate();
         response.sendRedirect("login.html");
