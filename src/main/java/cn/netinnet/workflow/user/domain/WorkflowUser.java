@@ -6,6 +6,8 @@
  */
 package cn.netinnet.workflow.user.domain;
 
+import org.crazycake.shiro.AuthCachePrincipal;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -14,7 +16,7 @@ import java.util.Set;
  * @author admin
  * @date   2020-03-06
  **/
-public class WorkflowUser implements Serializable {
+public class WorkflowUser implements Serializable, AuthCachePrincipal {
     private Long id;
 
     private String username;
@@ -192,5 +194,10 @@ public class WorkflowUser implements Serializable {
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
+    }
+
+    @Override
+    public String getAuthCacheKey() {
+        return getId().toString();
     }
 }
