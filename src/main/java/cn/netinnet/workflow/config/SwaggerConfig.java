@@ -13,11 +13,19 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+/**
+ * @ClassName SwaggerConfig
+ * @Description
+ * @Author yuyb
+ * @Date 2020/3/12 17:21
+ */
 @EnableSwagger2
 @Configuration
 public class SwaggerConfig {
 	
-	//是否开启swagger，正式环境一般是需要关闭的，可根据springboot的多环境配置进行设置
+    /**
+     是否开启swagger，正式环境一般是需要关闭的，可根据springboot的多环境配置进行设置
+     **/
     @Value(value = "${swagger.enabled}")
     Boolean swaggerEnabled;
 
@@ -26,14 +34,14 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo())
                 // 是否开启
                 .enable(swaggerEnabled).select()
-                .apis(RequestHandlerSelectors.basePackage("com.reanod.workflow.controller"))
+                .apis(RequestHandlerSelectors.basePackage("cn.netinnet.workflow"))
                 .paths(PathSelectors.any()).build();
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Reanod工作流API")
-                .description("This is a restful api document of Spring Boot.")
+                .title("工作流API")
+                .description("工作流API.")
                 // 作者信息
                 .contact(new Contact("meteor", "", "1020451901@qq.com"))
                 .version("1.0.0")

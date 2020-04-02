@@ -1,7 +1,8 @@
 package cn.netinnet.workflow.junit;
 
+import cn.netinnet.common.util.DateUtil;
 import cn.netinnet.workflow.BaseTest;
-import cn.netinnet.workflow.activiti.Leave;
+import cn.netinnet.workflow.activiti.domain.FormLeave;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
@@ -54,20 +55,21 @@ public class TaskJunitTest extends BaseTest {
         System.out.println("=====流程部署信息:"+jdeployment);
         logger.info("=====流程部署信息:"+jdeployment);
 
-        Leave leave = new Leave();
-        leave.setLeaveId("leaveId-2019");
-        leave.setDays("3");
-        leave.setUserId("张三");
-        leave.setLeaveReason("生病");
-        leave.setLeaveStatus("审批中");
+        FormLeave leave = new FormLeave();
+        leave.setFormId(DateUtil.getUID());
+        leave.setLeaveDay(3);
+        leave.setLeaverId(1L);
+        leave.setLeaverName("张三");
+        leave.setReason("生病");
+        leave.setApproveResult(0);
 
         String processDefinitionKey = "leaveprocess";
         Map<String,Object> leavemap = new HashMap<>();
-        leavemap.put("LeaveId", leave.getLeaveId());
-        leavemap.put("Days", leave.getDays());
-        leavemap.put("UserId", leave.getUserId());
-        leavemap.put("LeaveStatus", leave.getLeaveStatus());
-        leavemap.put("ProcessInstanceId", leave.getProcessInstanceId());
+        leavemap.put("LeaveId", leave.getFormId());
+        leavemap.put("Days", leave.getLeaveDay());
+        leavemap.put("UserId", leave.getLeaverId());
+        leavemap.put("approveResult", leave.getApproveResult());
+        //leavemap.put("ProcessInstanceId", leave.getProcessInstanceId());
         String jleavemap = mapper.writeValueAsString(leavemap);
         System.out.println("=====流程启动参数:"+jleavemap);
         logger.info("=====流程启动参数:"+jleavemap);
@@ -90,7 +92,7 @@ public class TaskJunitTest extends BaseTest {
         //张三查询个人列表
         List<Task> zhagnsanTask = taskService
                 .createTaskQuery()
-                .taskAssignee(leave.getUserId())
+                .taskAssignee(leave.getLeaverId().toString())
                 .processInstanceId(leave.getProcessInstanceId())
                 .list();
         for (Task task : zhagnsanTask) {

@@ -40,96 +40,96 @@
 			<ul class="io-import io-control io-control-list io-horizontal">
 				<li><input type="text"  style="width: 200px" id="modelName"  placeholder="请输入流程名称" ></li>
 			</ul>
+	 </div>
+	<!-- 右上角面板 -->
+	<div class="io-editing-tools"  jswidget="editing-tools"
+		style="display: block;">
+		<!-- 帮助和放大 -->
+		<ul class="io-control-list io-horizontal">
+			<li class="io-control" id="keybindings" >
+				<button title="Toggle keyboard shortcuts overlay"
+					jsaction="click:bio.showKeyboard">
+					<span class="icon-keyboard"> </span>
+				</button>
+			</li>
+			<li class="io-control" id="fullscreen">
+				<button title="Toggle Fullscreen"
+					jsaction="click:bio.toggleFullscreen">
+					<span class="icon-resize-full"> </span>
+				</button>
+			</li>
+		</ul>
+	</div>
+	<!-- 放大缩小 -->
+	<div class="io-zoom-controls" style="display:none">
+		<ul class="io-zoom-reset io-control io-control-list">
+		  <li>
+			<button title="reset zoom" jsaction="click:bio.zoomReset">
+			  <span class="icon-size-reset"></span>
+			</button>
+		  </li>
+		</ul>
+		<ul class="io-zoom io-control io-control-list">
+		  <li>
+			<button title="zoom in" jsaction="click:bio.zoomIn">
+			  <span class="icon-plus"></span>
+			</button>
+		  </li>
+		  <li>
+			<hr>
+		  </li>
+		  <li>
+			<button href="" title="zoom out" jsaction="click:bio.zoomOut">
+			  <span class="icon-minus"></span>
+			</button>
+		  </li>
+		</ul>
+	  </div>
+	<div class="io-dialog keybindings-dialog open"  id="help"  style="display: none">
+		<div class="content bindings-default">
+		  <h1>Keyboard Shortcuts</h1>
+		  <table>
+			<tbody>
+			  <tr>
+				<td>Undo</td>
+				<td class="binding"><code>ctrl + Z</code></td>
+			  </tr>
+			  <tr>
+				<td>Redo</td>
+				<td class="binding"><code>ctrl + ⇧ + Z</code></td>
+			  </tr>
+			  <tr>
+				<td>Select All</td>
+				<td class="binding"><code>ctrl + A</code></td>
+			  </tr>
+			  <tr>
+				<td>Scrolling (Vertical)</td>
+				<td class="binding"><code>ctrl + Scrolling</code></td>
+			  </tr>
+			  <tr>
+				<td>Scrolling (Horizontal)</td>
+				<td class="binding"><code>ctrl + ⇧ + Scrolling</code></td>
+			  </tr>
+			  <tr>
+				<td>Direct Editing</td>
+				<td class="binding"><code>E</code></td>
+			  </tr>
+			  <tr>
+				<td>Hand Tool</td>
+				<td class="binding"><code>H</code></td>
+			  </tr>
+			  <tr>
+				<td>Lasso Tool</td>
+				<td class="binding"><code>L</code></td>
+			  </tr>
+			  <tr>
+				<td>Space Tool</td>
+				<td class="binding"><code>S</code></td>
+			  </tr>
+			</tbody>
+		  </table>
 		</div>
-		<!-- 右上角面板 -->
-		<div class="io-editing-tools"  jswidget="editing-tools"
-			style="display: block;">
-			<!-- 帮助和放大 -->
-			<ul class="io-control-list io-horizontal">
-				<li class="io-control" id="keybindings" >
-					<button title="Toggle keyboard shortcuts overlay"
-						jsaction="click:bio.showKeyboard">
-						<span class="icon-keyboard"> </span>
-					</button>
-				</li>
-				<li class="io-control" id="fullscreen">
-					<button title="Toggle Fullscreen"
-						jsaction="click:bio.toggleFullscreen">
-						<span class="icon-resize-full"> </span>
-					</button>
-				</li>
-			</ul>
-		</div>
-		<!-- 放大缩小 -->
-		<div class="io-zoom-controls" style="display:none">
-		    <ul class="io-zoom-reset io-control io-control-list">
-		      <li>
-		        <button title="reset zoom" jsaction="click:bio.zoomReset">
-		          <span class="icon-size-reset"></span>
-		        </button>
-		      </li>
-		    </ul>
-		    <ul class="io-zoom io-control io-control-list">
-		      <li>
-		        <button title="zoom in" jsaction="click:bio.zoomIn">
-		          <span class="icon-plus"></span>
-		        </button>
-		      </li>
-		      <li>
-		        <hr>
-		      </li>
-		      <li>
-		        <button href="" title="zoom out" jsaction="click:bio.zoomOut">
-		          <span class="icon-minus"></span>
-		        </button>
-		      </li>
-		    </ul>
-		  </div>
-		<div class="io-dialog keybindings-dialog open"  id="help"  style="display: none">
-		    <div class="content bindings-default">
-		      <h1>Keyboard Shortcuts</h1>
-		      <table>
-		        <tbody>
-		          <tr>
-		            <td>Undo</td>
-		            <td class="binding"><code>ctrl + Z</code></td>
-		          </tr>
-		          <tr>
-		            <td>Redo</td>
-		            <td class="binding"><code>ctrl + ⇧ + Z</code></td>
-		          </tr>
-		          <tr>
-		            <td>Select All</td>
-		            <td class="binding"><code>ctrl + A</code></td>
-		          </tr>
-		          <tr>
-		            <td>Scrolling (Vertical)</td>
-		            <td class="binding"><code>ctrl + Scrolling</code></td>
-		          </tr>
-		          <tr>
-		            <td>Scrolling (Horizontal)</td>
-		            <td class="binding"><code>ctrl + ⇧ + Scrolling</code></td>
-		          </tr>
-		          <tr>
-		            <td>Direct Editing</td>
-		            <td class="binding"><code>E</code></td>
-		          </tr>
-		          <tr>
-		            <td>Hand Tool</td>
-		            <td class="binding"><code>H</code></td>
-		          </tr>
-		          <tr>
-		            <td>Lasso Tool</td>
-		            <td class="binding"><code>L</code></td>
-		          </tr>
-		          <tr>
-		            <td>Space Tool</td>
-		            <td class="binding"><code>S</code></td>
-		          </tr>
-		        </tbody>
-		      </table>
-		    </div>
-		  </div>
+	  </div>
     <!-- <button id="save-button">print to console</button> -->
     <script th:src="@{/static/js/libs/jquery-3.2.1.min.js}"></script>
     <script th:src="@{/static/js/common.js}"></script>

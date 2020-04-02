@@ -4,11 +4,10 @@ import cn.netinnet.common.util.DateUtil;
 import cn.netinnet.workflow.activiti.dao.FormJsonMapper;
 import cn.netinnet.workflow.activiti.domain.FormJson;
 import cn.netinnet.workflow.common.global.HttpResultEntry;
-import cn.netinnet.workflow.user.domain.WorkflowUser;
 import cn.netinnet.workflow.util.FileUtil;
-import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.annotations.Api;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.RepositoryService;
@@ -22,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ResourceUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -42,6 +42,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/model")
+@Api(value = "ActivitiController|工作流相关接口")
 public class ActivitiController {
 	
 	private static final Logger log = LoggerFactory.getLogger(ActivitiController.class);
@@ -55,28 +56,35 @@ public class ActivitiController {
     @Resource
     FormJsonMapper formJsonMapper;
 
-    @RequestMapping(value = "add")
+    @GetMapping(value = "add")
     public ModelAndView index(HttpSession session){
         ModelAndView mv = new ModelAndView();
         mv.setViewName("bpmn/add");
         return mv;
     }
 
-    @RequestMapping(value = "purchase")
+    @GetMapping(value = "purchase")
     public ModelAndView purchase(HttpSession session){
         ModelAndView mv = new ModelAndView();
         mv.setViewName("model/cgd");
         return mv;
     }
 
-    @RequestMapping(value = "excel")
+    @GetMapping(value = "leave")
+    public ModelAndView leave(HttpSession session){
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("model/qjd");
+        return mv;
+    }
+
+    @GetMapping(value = "excel")
     public ModelAndView spreadSheet(HttpSession session){
         ModelAndView mv = new ModelAndView();
         mv.setViewName("model/excel");
         return mv;
     }
 
-    @RequestMapping(value = "modelDetail")
+    @GetMapping(value = "modelDetail")
     public ModelAndView modelDetail(String type){
         Long excelId = 1L;
         if("purchase".equals(type)){
@@ -92,7 +100,7 @@ public class ActivitiController {
         return mv;
     }
 
-    @RequestMapping(value="getExcelJson")
+    @GetMapping(value="getExcelJson")
     public HttpResultEntry getExcelJson(HttpServletRequest request, String fileName){
         String path = System.getProperty("user.dir")+"\\src\\main\resources\\data";
         fileName = path + File.separator + fileName;
@@ -119,7 +127,7 @@ public class ActivitiController {
     /**
      * 获取所有模型
      */
-    @RequestMapping(value="modelList")
+    @GetMapping(value="modelList")
     public HttpResultEntry modelList(HttpServletRequest request){
         return HttpResultEntry.ok("", repositoryService.createModelQuery().list());
     }
@@ -127,7 +135,7 @@ public class ActivitiController {
     /**
      * 发布模型为流程定义
      */
-    @RequestMapping("/deploy")
+    @GetMapping("/deploy")
     @ResponseBody
     public Object deploy(String modelId) throws Exception {
  

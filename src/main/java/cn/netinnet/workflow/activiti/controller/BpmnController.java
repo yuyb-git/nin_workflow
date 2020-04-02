@@ -11,6 +11,9 @@ import cn.netinnet.workflow.util.StringUtilForFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.pagehelper.PageInfo;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Model;
@@ -20,9 +23,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -51,34 +52,39 @@ public class BpmnController extends BaseController {
     @Resource
     ObjectMapper objectMapper;
 
-    @RequestMapping("/bpmn")
+    @GetMapping("/bpmn")
     public ModelAndView bpmn() {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("/bpmn/bpmn");
         return mv;
     }
 
-    @RequestMapping("/add")
+    @GetMapping("/add")
     public ModelAndView add() {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("/bpmn/add");
         return mv;
     }
 
-    @RequestMapping("/index")
+    @GetMapping("/index")
     public ModelAndView index() {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("/bpmn/index");
         return mv;
     }
 
-    @RequestMapping(value="get")
+    @GetMapping(value="get")
     public HttpResultEntry get(Integer id, HttpServletRequest request){
         WorkflowUser user =  this.getWorkflowUser(request);
         return HttpResultEntry.ok("", user);
     }
 
-    @RequestMapping(value="save")
+    @GetMapping(value="save")
+    @ApiOperation(value="保存bpmn模型", notes="新增bpmn模型数据")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType="query", name = "bpmnXml", value = "bpmnXml", required = true, dataType = "String"),
+            @ApiImplicitParam(paramType="query", name = "modelName", value = "模型名称", required = true, dataType = "String")
+    })
     public HttpResultEntry save(String bpmnXml, String modelName, HttpServletRequest request) throws DocumentException {
 
         log.debug("bpmnXml:{}", bpmnXml);
@@ -115,7 +121,7 @@ public class BpmnController extends BaseController {
         return HttpResultEntry.ok("保存成功", bpmn.getModelId());
     }
 
-    @RequestMapping("/upload")
+    @PostMapping("/upload")
     public HttpResultEntry upload(@RequestParam("file") MultipartFile file, String modelName,
                                   HttpServletRequest request) {
         String bpmnPath = (String)request.getServletContext().getAttribute("bpmnPath");
@@ -127,7 +133,7 @@ public class BpmnController extends BaseController {
         return HttpResultEntry.ok();
     }
 
-    @RequestMapping("/list")
+    @GetMapping("/list")
     public HttpResultEntry list() {
 
         PageInfo pageInfo = getPage(() -> {

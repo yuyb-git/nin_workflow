@@ -9,9 +9,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
@@ -32,21 +30,28 @@ public class LoginController extends BaseController {
     @Resource
     WorkflowUserService workflowUserService;
 
-    @RequestMapping("/")
+    @GetMapping(value = "/swagger")
+    public ModelAndView swagger() {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("redirect:swagger-ui.html");
+        return mv;
+    }
+
+    @GetMapping("/")
     public ModelAndView login() {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("/login");
         return mv;
     }
 
-    @RequestMapping("/index")
+    @GetMapping("/index")
     public ModelAndView index() {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("/main");
         return mv;
     }
 
-    @RequestMapping(value="login",method= RequestMethod.POST)
+    @PostMapping(value="login")
     public HttpResultEntry login(String username, String password, HttpServletRequest request) {
         WorkflowUser user = workflowUserService.getWorkflowUserByName(username);
         if(user==null) {
@@ -66,13 +71,13 @@ public class LoginController extends BaseController {
         }
     }
 
-    @RequestMapping(value="getUser")
+    @GetMapping(value="getUser")
     public HttpResultEntry getUser(HttpServletRequest request){
         WorkflowUser user =  (WorkflowUser) request.getSession().getAttribute("user");
         return HttpResultEntry.ok("操作成功", user);
     }
 
-    @RequestMapping(value="logout")
+    @GetMapping(value="logout")
     public void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.getSession().invalidate();
         response.sendRedirect("login.html");
