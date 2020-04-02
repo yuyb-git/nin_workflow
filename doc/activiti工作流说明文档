@@ -3,7 +3,9 @@
 比如在请假流程流转时如果请假天数大于3天则由总经理审核，否则由人事直接审核，请假天数就可以设置为流程变量，在流程流转时使用。
 
 2.流程变量作用域
-流程变量的作用域默认是一个流程实例(processInstance)，也可以是一个任务(task)或一个执行实例(execution)，这三个作用域流程实例的范围最大，可以称为global变量，任务和执行实例仅仅是针对一个任务和一个执行实例范围，范围没有流程实例大，称为local变量。
+流程变量的作用域默认是一个流程实例(processInstance)，也可以是一个任务(task)或一个执行实例(execution)，
+这三个作用域流程实例的范围最大，可以称为global变量，
+任务和执行实例仅仅是针对一个任务和一个执行实例范围，范围没有流程实例大，称为local变量。
 
 3.流程变量的使用方法
 1）设置流程变量
@@ -24,3 +26,69 @@ Exclusive gateways: 排它网关 - 相当于一个 if - else 表达式
 Inclusive gateways: 包含网关 - 相当于多个 if 条件表达式
 Parallel gateways: 并行网关 - 不需要条件判断直接执行其他路径
 Event-based gateways: the paths will be executed based on the events that satisfy the conditions
+
+6.TaskService方法说明
+(1)删除给定的任务，而不是删除与此任务相关的历史信息。
+void deleteTask(String taskId);
+(2)删除给定集合的所有任务，而不是删除与这些任务相关的历史信息。
+void deleteTasks(Collection<String> taskIds);
+(3)删除给定的任务。
+void deleteTask(String taskId, boolean cascade);
+(4)删除给定集合的所有任务
+void deleteTasks(Collection<String> taskIds, boolean cascade);
+(5)删除给定的任务。
+void deleteTask(String taskId, String deleteReason);
+(6)删除给定集合的所有任务
+void deleteTasks(Collection<String> taskIds, String deleteReason);
+
+(7)用户userId设为某个任务的assignee受让人  检查任务是否已有用户*分配给它。 不检查身份组件是否知道用户。
+claim(String taskId, String userId)
+
+(8)将任务委托给另一个用户。
+这意味着设置了assignee并将委派状态设置为{@link委派状态#PENDING}。
+如果没有设置所有者，则所有者将被设置为任务的当前受让人。
+delegateTask(String taskId, String userId)
+
+(9)标志着受让人完成了这项任务，并可以将其发回给所有者。
+ 只有当这个任务是{@link DelegationState#PENDING}委托时才能调用。
+在此方法返回后，{@link Task# getdelegate state()将被设置为{@link DelegationState#RESOLVED}。
+void resolveTask(String taskId);
+
+(10)标志着受让人完成了这项任务，提供了所需的变量，并且可以将其发回给所有者。
+只有当这个任务是{@link DelegationState#PENDING}委托时才能调用。
+在此方法返回后，{@link Task# getdelegate state()将被设置为{@link DelegationState#RESOLVED}。
+void resolveTask(String taskId, Map<String, Object> variables);
+
+(11)当任务成功执行时调用，所需的任务参数由最终用户给出。
+void complete(String taskI 0d, Map<String, Object> variables);
+(12)同上
+void complete(String taskId, Map<String, Object> variables, boolean localScope);
+
+(13)将给定任务的受让人更改为给定的userId。不检查用户是否被标识组件所知。
+void setAssignee(String taskId, String userId);
+
+(14)将此任务的所有权转移给另一个用户。不检查用户是否被标识组件所知。
+void setOwner(String taskId, String userId);
+
+(15)在任务上设置变量。
+如果变量不是已经存在，那么它将在最外层的范围内创建。
+这意味着在此任务与执行相关的情况下，流程实例。
+void setVariable(String taskId, String variableName, Object value);
+(16)同上
+void setVariables(String taskId, Map<String, ? extends Object> variables);
+//获取任务范围内的变量和搜索，如果还有执行范围的话。
+Object getVariable(String taskId, String variableName);
+(17)获取任务范围内的变量和搜索，如果还有执行范围的话。
+<T> T getVariable(String taskId, String variableName, Class<T> variableClass);
+(18)检查任务是否具有给定名称的变量，在任务范围内，如果还有执行范围。
+boolean hasVariable(String taskId, String variableName);
+
+
+7.activiti:taskListener 元素属性说明：
+    event (required): 事件类型.。支持的类型有：
+    create: 任务被创建，并且所有的属性都被设置好后。
+    assignment: 任务被委派给某人后.。注意: 当流程执行到达一个userTask时，会先触发一个assignment事件，再触发create事件。
+    complete:在任务完成后，且被从运行时数据（runtime data）中删除前触发。
+    delete: 在任务将要被删除之前发生。注意，当任务通过completeTask完成任务时，它也会被执行。
+    class: 必须调用的委托类。 一定要实现 org.activiti.engine.delegate.TaskListenerinterface接口。
+

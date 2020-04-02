@@ -147,6 +147,34 @@ public class ActivitiJunitTest extends BaseTest {
     }
 
     @Test
+    public void claim(){
+        String userId = "";
+        String processDefinitionKey = "conditionProcess";
+        Task task = taskService.createTaskQuery()
+                .processDefinitionKey(processDefinitionKey)
+                .includeProcessVariables()
+                .singleResult();
+        taskService.claim(task.getId(), userId);
+    }
+
+    @Test
+    @Rollback(false)
+    public void completeTask(){
+        String processDefinitionKey = "conditionProcess";
+        String assignee = "123";
+        Task task = taskService.createTaskQuery()
+                .processDefinitionKey(processDefinitionKey)
+                .includeProcessVariables().taskAssignee(assignee)
+                .singleResult();
+        Map<String, Object> map = new HashMap<>();
+        map.put("assignee", "123");
+        map.put("day", "5");
+        task.setAssignee("123");
+        taskService.setVariables(task.getId(), map);
+        taskService.complete(task.getId());
+    }
+
+    @Test
     public void getOutcomeFlow(){
         String assignee = "manager";
         Task task = taskService.createTaskQuery()

@@ -5,6 +5,7 @@ import cn.netinnet.workflow.common.global.HttpResultEntry;
 import cn.netinnet.workflow.user.domain.WorkflowUser;
 import cn.netinnet.workflow.user.service.WorkflowUserService;
 import cn.netinnet.workflow.util.MD5Utils;
+import io.swagger.annotations.Api;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -25,6 +26,7 @@ import java.io.IOException;
  */
 @RestController
 @RequestMapping("/")
+@Api(value = "LoginController|登录退出相关接口")
 public class LoginController extends BaseController {
 
     @Resource

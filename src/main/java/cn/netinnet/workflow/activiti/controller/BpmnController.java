@@ -11,6 +11,7 @@ import cn.netinnet.workflow.util.StringUtilForFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.pagehelper.PageInfo;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -41,6 +42,7 @@ import java.util.UUID;
  */
 @RestController
 @RequestMapping("/bpmn")
+@Api(value = "BpmnController|bpmn接口")
 public class BpmnController extends BaseController {
 
     private static final Logger log = LoggerFactory.getLogger(BpmnController.class);
