@@ -17,6 +17,10 @@ import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.Model;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -29,9 +33,15 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -152,7 +162,7 @@ public class ActivitiController {
             return "数据模型不符要求，请至少设计一条主线流程。";
         }
         byte[] bpmnBytes = new BpmnXMLConverter().convertToXML(model);
-        //发布流程
+        //发布流程BpmnJsonConverter
         String processName = modelData.getName() + ".bpmn20.xml";
         Deployment deployment = repositoryService.createDeployment()
                 .name(modelData.getName())
@@ -189,6 +199,42 @@ public class ActivitiController {
         log.info("task {} find ", task.getId());
         taskService.complete(task.getId());
         return "SUCCESS";
+    }
+
+    public static void main(String[] args) {
+        String path = System.getProperty("user.dir")+"\\src\\main\\resources\\processes";
+        String fileName = path + File.separator + "leave.bpmn";
+        File f = new File(fileName);
+        SAXReader reader = new SAXReader();
+        //BpmnJsonConverter converter = new BpmnJsonConverter();
+        XMLInputFactory factory = XMLInputFactory.newInstance();
+
+
+        try {
+            XMLStreamReader streamReader = factory.createXMLStreamReader(new FileReader(fileName));
+            BpmnModel bpmnModel = new BpmnXMLConverter().convertToBpmnModel(streamReader);
+            System.out.println(bpmnModel.getDefinitionsAttributes());
+            System.out.println(bpmnModel.getProcess("conditionProcess"));
+            Document doc = reader.read(f);
+            Element root = doc.getRootElement();
+            List<Element> childElements = root.elements();
+            /*for (Element child : childElements) {
+                if("process".equals(child.getName())){
+                    System.out.println("id: " + child.attributeValue("id"));
+                    List<Element> elementList = child.elements();
+                    for (Element ele : elementList) {
+                        System.out.println(ele.getName());
+                        System.out.println(ele..attributeValue("id"));
+                        System.out.println(ele.attributeValue("name"));
+
+                    }
+                }
+            }*/
+            //System.out.println(doc.asXML());
+        } catch (DocumentException | FileNotFoundException | XMLStreamException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }
